@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
+
+:root {
+    --clr: #222327;
+    --bg: #999;
+    --green: #29fd53;
+    --red: #fd2933;
+    --blue: #40A2E3;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins' sans-serif;
+}
+
+#wrapper {
+    width: 100svw;
+    height: 100svh;
+    overflow: hidden;
+}
+
+#top-content {
+    width: 100%;
+    height: fit-content;
+    padding: 15px 15px;
+
+    display: flex;
+    justify-content: flex-end;
+}
+
+#main-content {
+    width: 100%;
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    justify-items: center;
+    align-items: center;
+}
+
+#left-side-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: space-evenly;
+    row-gap: 35px;
+}
+
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 35px;
+    width: 60%;
+    padding: 10%;
+    background-color: var(--blue);
+    border-radius: 20px;
+}
+
+.form-wrapper h1 {
+    color: white;
+}
+
+#right-side-content {
+    width: 100%;
+    height: 100%;
+    background-color: var(--clr);
+
+    padding: 30px;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: start;
+}
+
+#pin-form {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.pin {
+    width: 50px;
+    height: 50px;
+    border: 1px solid white;
+    border-radius: 5px;
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    background-color: #f1f1f1;
+
+    font-size: 40px;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.pin:hover {
+    transform: rotate(360deg);
+    transform-style: flat;
+    transition-timing-function: linear;
+    transition-duration: 300ms;
+}
+
+.button {
+    padding: 5px 10px;
+    min-width: 90px;
+    width: fit-content;
+    border-radius: 10px;
+    background-color: #f1f1f1;
+    border: 1px solid #f1f1f1;
+
+}
+
+.button:hover {
+    background-color: var(--bg);
+    color: #f1f1f1;
+    border: 1px solid white;
+    cursor: pointer;
+    transition: all ease 450ms;
+}
+
+#submit-button {
+    font-size: 2rem;
+}
+
+#login {
+    font-size: 2rem;
+}
+
+.button a {
+    text-decoration: none;
+    color: black;
+}
+
+.button a:hover {
+    color: white;
+}
