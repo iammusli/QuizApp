@@ -1,5 +1,6 @@
 package entities;
 
+import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -10,21 +11,27 @@ import java.util.List;
 public class Question {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
+    
     private int id;
 
     @Column ( name = "time", nullable = false )
+    
     private int seconds;
 
     @Column ( name = "points", nullable = false)
+    
     private int points;
 
     @Column (name = "question_text", nullable = false)
+    
     private String question;
 
     @ManyToOne
+    
     private Quiz quiz;
 
     @OneToMany (mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    
     private List<Answer> answers = new ArrayList<>();
 
     public Question() {}
@@ -69,5 +76,8 @@ public class Question {
         answers.add(answer);
         answer.setQuestion(this);
         return this;
+    }
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
 }

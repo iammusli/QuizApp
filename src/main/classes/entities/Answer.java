@@ -1,6 +1,7 @@
 package entities;
 
 
+import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 
 @Entity
@@ -8,15 +9,19 @@ import jakarta.persistence.*;
 public class Answer {
     @Id
     @GeneratedValue ( strategy = GenerationType.IDENTITY)
+    
     private int id;
 
     @Column (name = "answer_text", nullable = false)
+    
     private String answer_text;
 
     @ManyToOne
+    
     private Question question;
 
     @Column (name = "correct", nullable = false)
+    
     private boolean correct;
 
     public Answer() {}

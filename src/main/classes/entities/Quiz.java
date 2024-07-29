@@ -3,7 +3,6 @@ package entities;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -11,19 +10,25 @@ import java.util.List;
 public class Quiz {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
+    
     private int id;
 
     @OneToOne
+    
     private User owner;
 
     @Column (name = "title", nullable = false)
+    
     private String title;
 
     @OneToMany (mappedBy = "quiz", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    
     private List<Question> questions = new ArrayList<>();
 
     public Quiz() {}
 
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
     public void setOwner(User owner) {
         this.owner = owner;
     }
@@ -43,5 +48,8 @@ public class Quiz {
     }
     public List<Question> getQuestions() {
         return questions;
+    }
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
 }

@@ -1,5 +1,7 @@
 package bootstrap;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import entities.Answer;
 import entities.Question;
 import entities.Quiz;
@@ -9,6 +11,12 @@ import dao.UserDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import services.QuizService;
+import services.UserService;
+import utils.AnswerSerializer;
+import utils.QuestionSerializer;
+import utils.QuizSerializer;
+import utils.UserSerializer;
 
 import java.util.ArrayList;
 
@@ -29,11 +37,13 @@ public class Main {
         User user = userDAO.findUserByUsername("mirza");
         userDAO.removeUser(user);
 */
-
+/*
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
         EntityManager em = emf.createEntityManager();
+        UserService userService = new UserService(new UserDAO());
+        QuizService quizService = new QuizService(new QuizDAO());
+        User user = userService.findByUsername("qqqq");
         em.getTransaction().begin();
-        User user = new User("Revaz", "pijeeebig");
         Quiz quiz = new Quiz();
         quiz.setTitle("Quiz 1");
         quiz.setOwner(user);
@@ -43,7 +53,6 @@ public class Main {
         answer.setQuestion(question);
         answer2.setQuestion(question);
         question.addAnswer(answer).addAnswer(answer2);
-        em.persist(user);
         em.persist(quiz);
         em.persist(question);
         em.persist(answer);
@@ -51,7 +60,21 @@ public class Main {
         em.getTransaction().commit();
         em.close();
         emf.close();
-
-
+*/
+        UserService userService = new UserService(new UserDAO());
+        QuizService quizService = new QuizService(new QuizDAO());
+        ArrayList<Quiz> quizzes;
+        User user = userService.findByUsername("qqqq");
+        quizzes = quizService.getAllQuizFromCreator(user.getId());
+        if(quizzes != null)
+            System.out.println(quizzes.get(0).getTitle());
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Question.class, new QuestionSerializer())
+                .registerTypeAdapter(Answer.class, new AnswerSerializer())
+                .registerTypeAdapter(Quiz.class, new QuizSerializer())
+                .registerTypeAdapter(User.class, new UserSerializer())
+                .create();
+        String json = gson.toJson(quizzes);
+        System.out.println(json);
     }
 }

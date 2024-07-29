@@ -1,21 +1,20 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
-
-
+<%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <head>
     <link rel="stylesheet" href="../css/home.css">
+    <title>Quiz - Home</title>
 </head>
 <body>
 <div class="content">
+
     <div class="box">
         <div class="card">
             <div class="front">
                 <div class="quiz-category">
-                    <h3 id="quiz-category">Geography</h3>
+                    <h3 id="quiz-category">Quiz category</h3>
                 </div>
                 <div>
-                    <img id="quiz-picture" src="../assets/background1.jpg">
+                    <img id="quiz-picture" src="../assets/background1.jpg" alt="background">
                 </div>
                 <div class="quiz-details">
                     <h3 id="quiz-name">Quiz name</h3>
@@ -29,58 +28,13 @@
             </div>
         </div>
     </div>
-    <div class="box">
-        <div class="card">
-            <div class="front">
-                <h1>Sport</h1>
-            </div>
-            <div class="back">BACK</div>
-        </div>
-    </div>
-    <div class="box">
-        <div class="card">
-            <div class="front">FRONT</div>
-            <div class="back">BACK</div>
-        </div>
-    </div>
-    <div class="box">
-        <div class="card">
-            <div class="front">FRONT</div>
-            <div class="back">BACK</div>
-        </div>
-    </div>
-
-    <div class="box">
-        <div class="card">
-            <div class="front">FRONT</div>
-            <div class="back">BACK</div>
-        </div>
-    </div>
-    <div class="box">
-        <div class="card">
-            <div class="front">FRONT</div>
-            <div class="back">BACK</div>
-        </div>
-    </div>
-    <div class="box">
-        <div class="card">
-            <div class="front">FRONT</div>
-            <div class="back">BACK</div>
-        </div>
-    </div>
-    <div class="box">
-        <div class="card">
-            <div class="front">FRONT</div>
-            <div class="back">BACK</div>
-        </div>
-    </div>
 
 </div>
 <div class="nav-wrapper">
     <div class="navigation">
         <ul>
             <li class="list active">
-                <a href="#">
+                <a>
                             <span class="icon">
                                 <ion-icon name="home-outline"></ion-icon>
                             </span>
@@ -88,7 +42,7 @@
                 </a>
             </li>
             <li class="list">
-                <a href="#">
+                <a>
                             <span class="icon">
                                 <ion-icon name="game-controller-outline"></ion-icon>
                             </span>
@@ -96,7 +50,7 @@
                 </a>
             </li>
             <li class="list">
-                <a href="#">
+                <a>
                             <span class="icon">
                                 <ion-icon name="albums-outline"></ion-icon>
                             </span>
@@ -104,7 +58,7 @@
                 </a>
             </li>
             <li class="list">
-                <a href="#">
+                <a>
                             <span class="icon">
                                 <ion-icon name="person-outline"></ion-icon>
                             </span>
@@ -112,7 +66,7 @@
                 </a>
             </li>
             <li class="list">
-                <a href="#">
+                <a>
                             <span class="icon">
                                 <ion-icon name="settings-outline"></ion-icon>
                             </span>

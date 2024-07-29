@@ -1,6 +1,7 @@
 package entities;
 
 
+import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 
 @Entity
@@ -8,12 +9,16 @@ import jakarta.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    
     private int id;
     @Column( name = "username", unique = true, nullable = false )
+    
     private String username;
     @Column ( name = "password", nullable = false )
+    
     private String password;
     @Column ( name = "is_admin")
+    
     private boolean isAdmin;
 
     public User() {}
@@ -26,6 +31,7 @@ public class User {
     public int getId() {
         return id;
     }
+    public void setId(int id) { this.id = id; }
     public String getUsername() {
         return username;
     }

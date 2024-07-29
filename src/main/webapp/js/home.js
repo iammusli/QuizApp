@@ -10,6 +10,7 @@ list.forEach((item) => {
     item.addEventListener('click', activeLink);
 });
 
+
 const cards = document.querySelectorAll('.card');
 function selectCard(){
     if(this.classList.contains('selected')){

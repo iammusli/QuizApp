@@ -45,7 +45,9 @@ public class LoginServlet extends HttpServlet {
             } else {
                 User user = userService.authenticate(username, password);
                 if(user != null){
+                    String page = "home";
                     request.getSession().setAttribute("user", user);
+                    request.getSession().setAttribute("page", page);
                     response.sendRedirect(request.getContextPath() + "/admin/home");
                     return;
                 } else {
