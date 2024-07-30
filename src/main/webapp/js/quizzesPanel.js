@@ -65,8 +65,28 @@ function makeQuizCard(quizData) {
     var back = document.createElement("div");
     back.classList.add("back");
 
-    var button = document.createElement("button");
-    button.classList.add("card-button");
+    var buttonPlay = document.createElement("button");
+    buttonPlay.classList.add("card-button");
+    buttonPlay.textContent = "Play";
+    var buttonEdit = document.createElement("button");
+    buttonEdit.classList.add("card-button");
+    buttonEdit.textContent = "Edit";
+    var buttonDelete = document.createElement("button");
+    buttonDelete.classList.add("card-button");
+    buttonDelete.textContent = "Delete";
+
+    buttonPlay.addEventListener("click", function(){
+       console.log("Play quiz");
+    });
+    buttonEdit.addEventListener("click", function(){
+        console.log("Edit quiz");
+        var xhr = new XMLHttpRequest();
+        
+    });
+    buttonDelete.addEventListener("click", function(){
+        console.log("Delete quiz");
+    });
+
 
     box.appendChild(card);
     card.appendChild(front);
@@ -78,7 +98,9 @@ function makeQuizCard(quizData) {
     front.appendChild(quizDetails);
     quizDetails.appendChild(quizName);
     quizDetails.appendChild(questionNumber);
-    back.appendChild(button);
+    back.appendChild(buttonPlay);
+    back.appendChild(buttonEdit);
+    back.appendChild(buttonDelete);
 
     return box;
 }
