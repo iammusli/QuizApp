@@ -14,6 +14,11 @@ public class UserService {
         user.setPassword(SecurityUtil.hashPassword(user.getPassword()));
         return userDAO.createUser(user);
     }
+
+    public void updateUser(User user) {
+        userDAO.updateUser(user);
+    }
+
     public User findByUsername(String username) {
         return userDAO.findUserByUsername(username);
     }

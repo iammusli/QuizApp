@@ -6,11 +6,11 @@ import jakarta.persistence.Query;
 
 public class UserDAO extends AbstractDAO {
 
-    public UserDAO(){
+    public UserDAO() {
         super();
     }
 
-    public User findUserById(int id){
+    public User findUserById(int id) {
         EntityManager em = createEntityManager();
         try {
             em.getTransaction().begin();
@@ -20,15 +20,19 @@ public class UserDAO extends AbstractDAO {
             em.getTransaction().commit();
             return u;
         } catch (Exception e) {
-            em.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
         } finally {
-            if(em != null){
+            if (em != null) {
                 em.close();
             }
         }
         return null;
     }
-    public User findUserByUsername(String username){
+
+    public User findUserByUsername(String username) {
         EntityManager em = createEntityManager();
         try {
             em.getTransaction().begin();
@@ -38,16 +42,19 @@ public class UserDAO extends AbstractDAO {
             em.getTransaction().commit();
             return u;
         } catch (Exception e) {
-            em.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
         } finally {
-            if(em != null){
+            if (em != null) {
                 em.close();
             }
         }
         return null;
     }
 
-    public boolean createUser(User user){
+    public boolean createUser(User user) {
         EntityManager em = createEntityManager();
         try {
             em.getTransaction().begin();
@@ -55,18 +62,21 @@ public class UserDAO extends AbstractDAO {
             em.getTransaction().commit();
             return true;
         } catch (Exception e) {
-            em.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
         } finally {
-            if(em != null){
+            if (em != null) {
                 em.close();
             }
         }
         return false;
     }
 
-    public boolean validateUser(User user){
+    public boolean validateUser(User user) {
         EntityManager em = createEntityManager();
-        try{
+        try {
             em.getTransaction().begin();
             Query q = em.createQuery("SELECT u FROM User u WHERE u.username = :username " +
                     "AND u.password = :password");
@@ -74,37 +84,57 @@ public class UserDAO extends AbstractDAO {
             q.setParameter("password", user.getPassword());
             User u = (User) q.getSingleResult();
             em.getTransaction().commit();
-            if(u != null)
-                return true;
+            return u != null;
         } catch (Exception e) {
-            em.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
         } finally {
-            if(em != null){
+            if (em != null) {
                 em.close();
             }
         }
         return false;
     }
 
-    public boolean removeUser(User user){
+    public void updateUser(User user) {
         EntityManager em = createEntityManager();
-        try{
+        try {
+            em.getTransaction().begin();
+            em.merge(user);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    public boolean removeUser(User user) {
+        EntityManager em = createEntityManager();
+        try {
             em.getTransaction().begin();
             Query q = em.createQuery("DELETE FROM User u WHERE u.username = :username");
             q.setParameter("username", user.getUsername());
-            if(q.executeUpdate() > 0){
-                em.getTransaction().commit();
-                return true;
-            }
+            int deletedCount = q.executeUpdate();
+            em.getTransaction().commit();
+            return deletedCount > 0;
         } catch (Exception e) {
-            em.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
         } finally {
-            if(em != null){
+            if (em != null) {
                 em.close();
             }
         }
         return false;
     }
-
 }
-
