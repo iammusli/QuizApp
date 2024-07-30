@@ -14,6 +14,7 @@
     --green: #29fd53;
     --red: #fd2933;
     --blue: #40A2E3;
+    --blue-dark: #348cc1; /* darker blue */
 }
 
 body {
@@ -265,7 +266,7 @@ div .quiz-picture {
     background-color: #ffffff;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
+    max-width: 500px;
     margin: 35px auto;
     text-align: center;
     padding: 20px;
@@ -306,7 +307,14 @@ div .quiz-picture {
     padding: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
+.stat-set {
+    background: #f7f7f7;
+    border-radius: 10px;
+    flex: 0 0 100%;
+    margin: 10px 0;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 .stat p:first-child {
     font-size: 24px;
     font-weight: bold;
@@ -318,4 +326,52 @@ div .quiz-picture {
     color: #777777;
     font-size: 14px;
 }
+.settings-table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
+.settings-table td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.settings-table tr:last-child td {
+    border-bottom: none;
+}
+
+.input-box {
+    width: calc(100% - 30px);
+    padding: 10px;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.input-box:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 5px rgba(64, 162, 227, 0.5);
+    outline: none;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.save-changes-btn {
+    background-color: var(--blue);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.save-changes-btn:hover {
+    background-color: var(--blue-dark); /* Using the darker shade of blue */
+}
