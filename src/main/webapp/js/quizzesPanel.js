@@ -1,4 +1,5 @@
 quizData = {
+    id: "1",
     category: "Quiz category",
     name: "Quiz name",
     questions: "10"
@@ -19,8 +20,13 @@ document.addEventListener("DOMContentLoaded", function (){
                 var data = JSON.parse(xhr.responseText);
                 console.log(data);
                 var content = document.querySelector(".content");
-                for(var i = 0; i < 20; ++i)
+                console.log(data.length);
+                for(var i = 0; i < data.length; ++i){
+                    quizData.id = data[i].id;
+                    quizData.name = data[i].title;
+                    quizData.questions = data[i].questions.length;
                     content.appendChild(makeQuizCard(quizData));
+                }
             }
         }
         xhr.onerror = function (){
@@ -35,6 +41,7 @@ function makeQuizCard(quizData) {
 
     var card = document.createElement("div");
     card.classList.add("card");
+    card.id = quizData.id;
     card.addEventListener('click', selectCard);
 
     var front = document.createElement("div");
@@ -85,7 +92,7 @@ function makeQuizCard(quizData) {
     });
 
     var linkEdit = document.createElement("a");
-    linkEdit.href = "/rwa/admin/quizzes/edit";
+    linkEdit.href = "/rwa/admin/quizzes/edit?quizID=" + quizData.id;
     linkEdit.textContent = "Edit";
 
     box.appendChild(card);
@@ -116,6 +123,7 @@ function selectCard(){
             item.classList.remove('selected');
         });
         this.classList.add('selected');
+        quizData.id = this.id;
     }
     cards = document.querySelectorAll(".card");
 }

@@ -16,4 +16,7 @@ public class QuizService {
         return quizDAO.findQuizzesByOwnerId(creatorId);
     }
 
+    public Quiz getQuizById(int quizId) {
+        return quizDAO.findQuizById(quizId);
+    }
 }
