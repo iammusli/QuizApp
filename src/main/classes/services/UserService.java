@@ -16,6 +16,7 @@ public class UserService {
     }
 
     public void updateUser(User user) {
+        user.setPassword(SecurityUtil.hashPassword(user.getPassword()));
         userDAO.updateUser(user);
     }
 

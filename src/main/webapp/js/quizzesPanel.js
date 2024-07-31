@@ -70,7 +70,6 @@ function makeQuizCard(quizData) {
     buttonPlay.textContent = "Play";
     var buttonEdit = document.createElement("button");
     buttonEdit.classList.add("card-button");
-    buttonEdit.textContent = "Edit";
     var buttonDelete = document.createElement("button");
     buttonDelete.classList.add("card-button");
     buttonDelete.textContent = "Delete";
@@ -80,13 +79,14 @@ function makeQuizCard(quizData) {
     });
     buttonEdit.addEventListener("click", function(){
         console.log("Edit quiz");
-        var xhr = new XMLHttpRequest();
-        
     });
     buttonDelete.addEventListener("click", function(){
         console.log("Delete quiz");
     });
 
+    var linkEdit = document.createElement("a");
+    linkEdit.href = "/rwa/admin/quizzes/edit";
+    linkEdit.textContent = "Edit";
 
     box.appendChild(card);
     card.appendChild(front);
@@ -101,6 +101,7 @@ function makeQuizCard(quizData) {
     back.appendChild(buttonPlay);
     back.appendChild(buttonEdit);
     back.appendChild(buttonDelete);
+    buttonEdit.appendChild(linkEdit);
 
     return box;
 }

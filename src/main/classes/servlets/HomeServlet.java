@@ -34,6 +34,9 @@ public class HomeServlet extends HttpServlet {
             req.getSession().setAttribute("quizzes", quizzes);
             req.getSession().setAttribute("page", "quizzes");
         }
+        if(req.getRequestURI().equals("/admin/quizzes/edit")) {
+            req.getRequestDispatcher("/edit-quiz.jsp").forward(req, resp);
+        }
         req.getRequestDispatcher("/home.jsp").forward(req, resp);
     }
 
