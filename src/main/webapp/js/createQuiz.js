@@ -8,7 +8,7 @@ const createQuestion = document.getElementById("create-question-btn");
 const createQuiz = document.getElementById("create-quiz-btn");
 const questionContainer = document.querySelector(".question-container");
 const questionNumber = document.getElementById("question-number");
-
+var quizData;
 var questions = document.querySelectorAll('.question-wrapper');
 var arrows = document.querySelectorAll('.arrow');
 
@@ -119,5 +119,20 @@ createQuestion.addEventListener("click", function(){
     }
 
     updateBackground();
-});
 
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/rwa/admin/quiz/empty", true);
+    xhr.setRequestHeader('Accept', 'application/json');
+    xhr.send();
+    xhr.onload = function (){
+        if(xhr.status !== 200){
+            console.error(`Error ${xhr.status}: ${xhr.statusText}`);
+        } else {
+            quizData = JSON.parse(xhr.responseText);
+            console.log(quizData);
+        }
+    }
+    xhr.onerror = function (){
+        console.error("Request failed");
+    };
+});

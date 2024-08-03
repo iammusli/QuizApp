@@ -32,19 +32,6 @@ public class CreateQuizServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        Quiz quiz = new Quiz();
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Quiz.class, new QuizSerializer())
-                .registerTypeAdapter(User.class, new UserSerializer())
-                .registerTypeAdapter(Question.class, new QuestionSerializer())
-                .registerTypeAdapter(Answer.class, new AnswerSerializer())
-                .create();
-        String json = gson.toJson(quiz);
-        PrintWriter out = response.getWriter();
-        out.println(json);
-        out.flush();
         request.getRequestDispatcher("/createQuiz.jsp").forward(request, response);
     }
 

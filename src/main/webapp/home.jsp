@@ -7,6 +7,7 @@
 </head>
 <body>
 <div class="content">
+    <button id="createQuiz"><a href="/rwa/admin/quizzes/create"> CREATE </a></button>
 </div>
 <div class="nav-wrapper">
     <div class="navigation">
