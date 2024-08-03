@@ -17,7 +17,7 @@
 
 #wrapper {
     width: 100svw;
-    height: 100svh;
+    min-height: 100svh;
     overflow: hidden;
 }
 
@@ -48,6 +48,7 @@
 
     padding: 30px;
 
+    position: sticky;
     display: flex;
     justify-content: center;
     align-items: center;
