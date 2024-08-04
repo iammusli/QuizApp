@@ -267,7 +267,7 @@ div .quiz-picture {
     color: white;
 }
 
-.profile-card {
+.profile-card-settings {
     background-color: #ffffff;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -277,42 +277,33 @@ div .quiz-picture {
     padding: 20px;
 }
 
-.profile-header {
+.profile-header-settings {
     background: var(--blue);
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     padding: 20px 0;
 }
 
-.profile-header h1 {
+.profile-header-settings h1 {
     color: #ffffff;
     font-size: 24px;
     font-weight: bold;
     margin: 0;
 }
 
-.profile-header p {
+.profile-header-settings p {
     color: #cccccc;
     font-size: 16px;
 }
 
-.profile-stats {
+.profile-stats-settings {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
     padding: 20px 0;
     margin-top: 20px;
 }
-
-.stat {
-    background: #f7f7f7;
-    border-radius: 10px;
-    flex: 0 0 45%;
-    margin: 10px 0;
-    padding: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-.stat-set {
+.stat-set-settings {
     background: #f7f7f7;
     border-radius: 10px;
     flex: 0 0 100%;
@@ -320,17 +311,7 @@ div .quiz-picture {
     padding: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.stat p:first-child {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: var(--blue);
-}
 
-.stat p:last-child {
-    color: #777777;
-    font-size: 14px;
-}
 .settings-table {
     width: 100%;
     border-collapse: collapse;
@@ -489,4 +470,251 @@ div .quiz-picture {
 
 #pin-input-submit-button {
     font-size: 2rem;
+}
+.profile-* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+:root {
+    --profile-clr: #222327;
+    --profile-blue: #40A2E3;
+    --profile-dark-blue: #2F4F4F;
+}
+
+.profile-body {
+    overflow: hidden;
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background: var(--profile-clr);
+}
+
+.profile-content {
+    width: 100vw;
+    height: calc(100vh - 115px);
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    background: var(--profile-clr);
+}
+
+.profile-user-list {
+    width: 20vw;
+    margin-right: 20px;
+    overflow-y: auto;
+}
+
+.profile-user {
+    padding: 15px;
+    margin: 5px 0;
+    background: #f0f0f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.profile-user:hover {
+    background: #e0e0e0;
+}
+
+.profile-my-profile {
+    background: var(--profile-blue);
+    color: #fff;
+}
+
+.profile-card {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    text-align: center;
+    padding: 20px;
+}
+
+.profile-header {
+    background: var(--profile-blue);
+    border-radius: 15px 15px 0 0;
+    padding: 20px 0;
+    position: relative;
+}
+
+.profile-header h1 {
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.profile-header p {
+    color: #ccc;
+    font-size: 16px;
+}
+
+.profile-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px 0;
+    margin-top: 20px;
+}
+
+.profile-stat {
+    background: #f7f7f7;
+    border-radius: 10px;
+    flex: 0 0 45%;
+    margin: 10px 0;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-stat p:first-child {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--profile-blue);
+}
+
+.profile-stat p:last-child {
+    color: #777;
+    font-size: 14px;
+}
+
+.profile-edit-icon {
+    cursor: pointer;
+    font-size: 16px;
+    color: white;
+    margin-left: 5px;
+    transition: color 0.3s ease;
+    transform: scaleX(-1);
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+}
+
+.profile-edit-icon:hover {
+    color: var(--profile-dark-blue);
+}
+
+.profile-edit-modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.profile-modal-content {
+    background: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.profile-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.profile-close:hover {
+    color: #000;
+}
+
+.profile-new-username, .profile-new-password {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.profile-save-username {
+    padding: 10px 20px;
+    background: var(--profile-blue);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.profile-save-username:hover {
+    background: var(--profile-dark-blue);
+}
+
+.profile-role-switch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.profile-switch {
+    position: relative;
+    width: 120px;
+    height: 34px;
+}
+
+.profile-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.profile-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--profile-dark-blue);
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.profile-slider:before {
+    position: absolute;
+    content: "Editor";
+    height: 26px;
+    width: 60px;
+    left: 5px;
+    bottom: 4px;
+    transition: .4s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 50%;
+}
+
+.profile-switch input:checked + .profile-slider {
+    background: var(--profile-blue);
+}
+
+.profile-switch input:checked + .profile-slider:before {
+    transform: translateX(60px);
+    content: "Admin";
+}
+
+.profile-slider.round {
+    border-radius: 34px;
+}
+
+.profile-slider.round:before {
+    border-radius: 50%;
 }

@@ -2,6 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Quiz - Home</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -59,8 +60,8 @@
 
 <script src="../js/navigation.js"></script>
 <script src="../js/quizzesPanel.js"></script>
-<script src="../js/profileInfo.js"></script>
 <script src="../js/profileSettings.js"></script>
+<script src="../js/profiles.js"></script>
 <script src="../js/validatePinInputHome.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
