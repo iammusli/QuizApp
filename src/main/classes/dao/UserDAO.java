@@ -3,6 +3,7 @@ package dao;
 import entities.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import java.util.List;
 
 public class UserDAO extends AbstractDAO {
 
@@ -115,7 +116,26 @@ public class UserDAO extends AbstractDAO {
             }
         }
     }
-
+    public List<User> findAllUsers() {
+        EntityManager em = createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query q = em.createQuery("SELECT u FROM User u");
+            List<User> users = q.getResultList();
+            em.getTransaction().commit();
+            return users;
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
     public boolean removeUser(User user) {
         EntityManager em = createEntityManager();
         try {

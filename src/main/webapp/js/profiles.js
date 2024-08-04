@@ -5,20 +5,19 @@ $(document).ready(function() {
             type: 'GET',
             dataType: 'json',
             success: function(data) {
-                const username = data.username;
+                const userListHtml = data.map(user => `
+                    <div class="profile-user" data-username="${user.username}" data-rank="#${user.id}" data-games="100" data-points="500" data-completion="75%" data-correct="70%" data-incorrect="30%">${user.username}</div>
+                `).join('');
 
                 $('.content').html(`
                     <div class="profile-body">
                         <div class="profile-user-list" id="profile-user-list">
-                            <div class="profile-user profile-my-profile" data-username="${username}" data-rank="#99" data-games="250" data-points="1,084" data-completion="82%" data-correct="62%" data-incorrect="38%">My profile</div>
-                            <div class="profile-user" data-username="user1" data-rank="#101" data-games="100" data-points="500" data-completion="75%" data-correct="70%" data-incorrect="30%">User 1</div>
-                            <div class="profile-user" data-username="user2" data-rank="#150" data-games="200" data-points="800" data-completion="80%" data-correct="60%" data-incorrect="40%">User 2</div>
-                            <div class="profile-user" data-username="user3" data-rank="#200" data-games="300" data-points="1,200" data-completion="85%" data-correct="65%" data-incorrect="35%">User 3</div>
+                            ${userListHtml}
                         </div>
                         <div class="profile-card" id="profile-card">
                             <div class="profile-header" id="profile-header">
                                 <h1>Profile Info <span id="edit-icon" class="profile-edit-icon"><i class="fas fa-pencil-alt"></i></span></h1>
-                                <p id="profile-username">Username: ${username}</p>
+                                <p id="profile-username">Username: </p>
                             </div>
                             <div class="profile-stats">
                                 <div class="profile-stat">
@@ -52,7 +51,7 @@ $(document).ready(function() {
                         <div class="profile-modal-content">
                             <span class="profile-close">&times;</span>
                             <h2>Edit Username</h2>
-                            <input type="text" id="new-username" class="profile-new-username" placeholder="Enter new username" value="${username}">
+                            <input type="text" id="new-username" class="profile-new-username" placeholder="Enter new username" value="">
                             
                             <h2>Edit Password</h2>
                             <input type="password" id="new-password" class="profile-new-password" placeholder="Enter new password">
@@ -83,12 +82,12 @@ $(document).ready(function() {
 
                 function updateProfileCard(user) {
                     const username = user.getAttribute('data-username');
-                    const rank = '#99';
-                    const games = '250';
-                    const points = '1,084';
-                    const completion = '82%';
-                    const correct = '62%';
-                    const incorrect = '38%';
+                    const rank = user.getAttribute('data-rank');
+                    const games = user.getAttribute('data-games');
+                    const points = user.getAttribute('data-points');
+                    const completion = user.getAttribute('data-completion');
+                    const correct = user.getAttribute('data-correct');
+                    const incorrect = user.getAttribute('data-incorrect');
 
                     profileHeader.querySelector('h1').innerHTML = `Profile Info <span id="edit-icon" class="profile-edit-icon"><i class="fas fa-pencil-alt"></i></span>`;
                     profileHeader.querySelector('#profile-username').textContent = `Username: ${username}`;
@@ -104,7 +103,7 @@ $(document).ready(function() {
                         modal.style.display = 'block';
                         newUsernameInput.value = username;
                         newPasswordInput.value = '';
-                        roleSwitch.checked = roleDisplay.textContent === 'Admin'; // Set default role based on current role
+                        roleSwitch.checked = roleDisplay.textContent === 'Admin';
                     });
                 }
 
