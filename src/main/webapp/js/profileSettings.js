@@ -6,12 +6,12 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(data) {
                 $('.content').html(`
-                    <div class="profile-card">
-                        <div class="profile-header">
+                    <div class="profile-card-settings">
+                        <div class="profile-header-settings">
                             <h1>Settings</h1>
                         </div>
-                        <div class="profile-stats">
-                            <div class="stat-set">
+                        <div class="profile-stats-settings">
+                            <div class="stat-set-settings">
                                 <table class="settings-table">
                                     <tr>
                                         <td>Change Username</td>
