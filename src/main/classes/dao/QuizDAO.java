@@ -23,7 +23,9 @@ public class QuizDAO extends AbstractDAO {
             em.getTransaction().commit();
             return quiz;
         } catch (Exception e) {
-            em.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
         } finally {
             if (em != null) {
                 em.close();
@@ -42,7 +44,9 @@ public class QuizDAO extends AbstractDAO {
             em.getTransaction().commit();
             return quizzes;
         } catch (Exception e) {
-            em.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
         } finally {
             if(em != null) {
                 em.close();
@@ -61,7 +65,9 @@ public class QuizDAO extends AbstractDAO {
             em.getTransaction().commit();
             return questions;
         } catch (Exception e) {
-            em.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
         } finally {
             if(em != null) {
                 em.close();
@@ -80,7 +86,9 @@ public class QuizDAO extends AbstractDAO {
             em.getTransaction().commit();
             return answers;
         } catch (Exception e) {
-            em.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
         } finally {
             if(em != null) {
                 em.close();
@@ -96,7 +104,10 @@ public class QuizDAO extends AbstractDAO {
             em.persist(quiz);
             em.getTransaction().commit();
         } catch (Exception e) {
-            em.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
         } finally {
             if(em != null) {
                 em.close();

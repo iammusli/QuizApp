@@ -4,6 +4,8 @@ package entities;
 import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table  ( name = "user")
 public class User {
@@ -20,6 +22,9 @@ public class User {
     @Column ( name = "is_admin")
     
     private boolean isAdmin;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Quiz> quizzes;
 
     public User() {}
 
@@ -49,5 +54,11 @@ public class User {
     }
     public void setAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
+    }
+    public List<Quiz> getQuizzes() {
+        return quizzes;
+    }
+    public void setQuizzes(List<Quiz> quizzes) {
+        this.quizzes = quizzes;
     }
 }

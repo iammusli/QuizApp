@@ -41,8 +41,6 @@ public class CreateQuizServlet extends HttpServlet {
         Gson gson = new Gson();
         QuizDTO quizDTO = gson.fromJson(json, QuizDTO.class);
 
-        System.out.println(quizDTO.getCategory());
-
         Quiz quiz = new Quiz();
         quiz.setTitle(quizDTO.getTitle());
         quiz.setOwner(user);
@@ -67,5 +65,6 @@ public class CreateQuizServlet extends HttpServlet {
             }
         }
         quizService.saveQuiz(quiz);
+        request.getRequestDispatcher("/home.jsp").forward(request, response);
     }
 }

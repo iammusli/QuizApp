@@ -121,20 +121,20 @@ createQuestion.addEventListener("click", function(){
 
 createQuiz.addEventListener("click", function(){
     if(filled){
-        var QUIZ = new Quiz(quizName.value, quizCategory.value, []);
+        let QUIZ = new Quiz(quizName.value, quizCategory.value, []);
 
         questions = questionContainer.querySelectorAll(".question-wrapper");
 
-        for(var i = 0; i < questions.length; ++i){
-            var answers = questions[i].querySelectorAll(".answer-input");
-            var checkboxes = questions[i].querySelectorAll(".correct");
+        for(let i = 0; i < questions.length; ++i){
+            let answers = questions[i].querySelectorAll(".answer-input");
+            let checkboxes = questions[i].querySelectorAll(".correct");
             QUIZ.addQuestion(new Question(60, 10,questions[i].firstElementChild.firstElementChild.value, []));
-            for(var j = 0; j < 4; ++j){
+            for(let j = 0; j < 4; ++j){
                 QUIZ.questions[i].addAnswer(new Answer(answers[j].value, checkboxes[j].checked ));
             }
         }
-        var xhr = new XMLHttpRequest();
-        var json = JSON.stringify(QUIZ);
+        let xhr = new XMLHttpRequest();
+        let json = JSON.stringify(QUIZ);
         xhr.open("POST", "/rwa/admin/quizzes/create", true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function (){
