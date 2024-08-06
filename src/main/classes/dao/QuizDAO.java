@@ -89,4 +89,53 @@ public class QuizDAO extends AbstractDAO {
         return null;
     }
 
+    public void saveQuiz(Quiz quiz) {
+        EntityManager em = createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(quiz);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        } finally {
+            if(em != null) {
+                em.close();
+            }
+        }
+    }
+
+    public int saveQuestion(Question question) {
+        EntityManager em = createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(question);
+            em.getTransaction().commit();
+            return question.getId();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        } finally {
+            if(em != null) {
+                em.close();
+            }
+        }
+        return -1;
+    }
+
+    public int saveAnswer(Answer answer){
+        EntityManager em = createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(answer);
+            em.getTransaction().commit();
+            return answer.getId();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        } finally {
+            if(em != null) {
+                em.close();
+            }
+        }
+        return -1;
+    }
+
 }

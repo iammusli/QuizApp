@@ -39,7 +39,7 @@
                             <h3 id="quiz-card-category"></h3>
                         </div>
                         <div>
-                            <img class="quiz-picture" src ="background2.jpg" alt="bg">
+                            <img class="quiz-picture" src ="../../assets/background2.jpg" alt="bg">
                         </div>
                         <div class="quiz-details">
                             <h3 id="quiz-card-name"></h3>

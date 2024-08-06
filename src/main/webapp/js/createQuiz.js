@@ -8,7 +8,7 @@ const createQuestion = document.getElementById("create-question-btn");
 const createQuiz = document.getElementById("create-quiz-btn");
 const questionContainer = document.querySelector(".question-container");
 const questionNumber = document.getElementById("question-number");
-var quizData;
+var filled = false;
 var questions = document.querySelectorAll('.question-wrapper');
 var arrows = document.querySelectorAll('.arrow');
 
@@ -74,8 +74,6 @@ createQuestion.addEventListener("click", function(){
             questionContainer.removeChild(question);
             questionNumber.textContent = questionContainer.childElementCount + " questions";
         }, 500);
-
-        console.log(questionContainer.childElementCount);
     });
 
     var answerInputs = question.querySelectorAll('.answer-input');
@@ -101,7 +99,7 @@ createQuestion.addEventListener("click", function(){
     });
 
     function updateBackground() {
-        var filled = true;
+        filled = true;
 
         if (question.firstElementChild.firstElementChild.value === "") filled = false;
 
@@ -119,20 +117,73 @@ createQuestion.addEventListener("click", function(){
     }
 
     updateBackground();
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/rwa/admin/quiz/empty", true);
-    xhr.setRequestHeader('Accept', 'application/json');
-    xhr.send();
-    xhr.onload = function (){
-        if(xhr.status !== 200){
-            console.error(`Error ${xhr.status}: ${xhr.statusText}`);
-        } else {
-            quizData = JSON.parse(xhr.responseText);
-            console.log(quizData);
-        }
-    }
-    xhr.onerror = function (){
-        console.error("Request failed");
-    };
 });
+
+createQuiz.addEventListener("click", function(){
+    if(filled){
+        var QUIZ = new Quiz(quizName.value, quizCategory.value, []);
+
+        questions = questionContainer.querySelectorAll(".question-wrapper");
+
+        for(var i = 0; i < questions.length; ++i){
+            var answers = questions[i].querySelectorAll(".answer-input");
+            var checkboxes = questions[i].querySelectorAll(".correct");
+            QUIZ.addQuestion(new Question(60, 10,questions[i].firstElementChild.firstElementChild.value, []));
+            for(var j = 0; j < 4; ++j){
+                QUIZ.questions[i].addAnswer(new Answer(answers[j].value, checkboxes[j].checked ));
+            }
+        }
+        var xhr = new XMLHttpRequest();
+        var json = JSON.stringify(QUIZ);
+        xhr.open("POST", "/rwa/admin/quizzes/create", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function (){
+            if(xhr.status !== 200){
+                console.error(`Error ${xhr.status}: ${xhr.statusText}`);
+            } else {
+
+            }
+        }
+        xhr.onerror = function (){
+            console.error("Request failed");
+        };
+        xhr.send("quiz=" + json);
+    } else {
+        console.log("quiz not filled properly");
+    }
+})
+
+function Quiz(title, category ,questions){
+    this.title = title;
+    this.category = category;
+    this.questions = questions;
+}
+
+Quiz.prototype.addQuestion = function(question){
+    this.questions.push(question);
+}
+
+function Question(seconds, points, question, answers){
+    this.seconds = seconds;
+    this.points = points;
+    this.question = question;
+    this.answers = answers;
+}
+
+Question.prototype.addAnswer = function(answer){
+    this.answers.push(answer);
+}
+
+function Answer(answer_text, correct){
+    this.answer_text = answer_text;
+    this.correct = correct;
+}
+
+function User(id, username, isAdmin){
+    this.id = id;
+    this.username = username;
+    this.isAdmin = isAdmin;
+}
+
+
+

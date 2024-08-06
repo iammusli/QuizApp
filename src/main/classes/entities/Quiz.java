@@ -21,6 +21,9 @@ public class Quiz {
     
     private String title;
 
+    @Column ( name="category" )
+    private String category;
+
     @OneToMany (mappedBy = "quiz", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     
     private List<Question> questions = new ArrayList<>();
@@ -41,10 +44,15 @@ public class Quiz {
     public String getTitle() {
         return title;
     }
-    public Quiz addQuestion(Question question) {
+    public void setCategory(String category) {
+        this.category = category;
+    }
+    public String getCategory() {
+        return category;
+    }
+    public void addQuestion(Question question) {
         questions.add(question);
         question.setQuiz(this);
-        return this;
     }
     public List<Question> getQuestions() {
         return questions;

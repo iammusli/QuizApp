@@ -1,6 +1,5 @@
 package entities;
 
-import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -72,10 +71,9 @@ public class Question {
     public List<Answer> getAnswers() {
         return answers;
     }
-    public Question addAnswer(Answer answer) {
+    public void addAnswer(Answer answer) {
         answers.add(answer);
         answer.setQuestion(this);
-        return this;
     }
     public void setAnswers(List<Answer> answers) {
         this.answers = answers;

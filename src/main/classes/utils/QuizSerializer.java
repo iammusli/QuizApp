@@ -15,6 +15,7 @@ public class QuizSerializer implements JsonSerializer<Quiz> {
         jsonQuiz.addProperty("id", quiz.getId());
         jsonQuiz.add("owner", context.serialize(quiz.getOwner()));
         jsonQuiz.addProperty("title", quiz.getTitle());
+        jsonQuiz.addProperty("category", quiz.getCategory());
         jsonQuiz.add("questions", context.serialize(quiz.getQuestions()));
         return jsonQuiz;
     }
