@@ -141,7 +141,7 @@ createQuiz.addEventListener("click", function(){
             if(xhr.status !== 200){
                 console.error(`Error ${xhr.status}: ${xhr.statusText}`);
             } else {
-                window.location.href = "/rwa/admin/home";
+
             }
         }
         xhr.onerror = function (){

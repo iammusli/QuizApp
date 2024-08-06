@@ -16,22 +16,44 @@
 %>
 <div id="wrapper">
     <div id="main-content">
-        <div id="left-side-content">
+            <div id="left-side-content">
+                <div class="left-side-quiz-space" >
+                    <div class="headline">
+                        <h1>Create a quiz</h1>
+                    </div>
+                    <div class="quiz-space">
+                        <div class="quiz-details">
+                            <label for="quiz-name">Quiz name</label>
+                            <input type="text" id="quiz-name" class="quiz-input-field">
+                            <label for="quiz-category">Quiz category</label>
+                            <input type="text" id="quiz-category" class="quiz-input-field">
+                        </div>
+                        <div class="quiz-buttons">
+                            <button id="create-question-btn" class="button">Create question</button>
+                            <button id="create-quiz-btn" class="button">Create quiz</button>
 
-        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-side-quiz-space">
+                    <div class="question-container">
+
+                    </div>
+                </div>
+            </div>
         <div id="right-side-content">
             <div class="box">
                 <div id="id" class="card">
                     <div class="front">
                         <div class="quiz-category">
-                            <h3 class="quiz-category">Quiz category</h3>
+                            <h3 class="quiz-category"></h3>
                         </div>
                         <div>
                             <img class="quiz-picture" src = "../../assets/background1.jpg" alt="bg">
                         </div>
                         <div class="quiz-details">
-                            <h3 class="quiz-name"><%= quiz.getTitle() %></h3>
-                            <h5 class="question-number"> <%= quiz.getQuestions().size() %> questions</h5>
+                            <h3 class="quiz-name"></h3>
+                            <h5 class="question-number"></h5>
                         </div>
                     </div>
                 </div>
@@ -39,5 +61,8 @@
         </div>
     </div>
 </div>
+<script src="../../js/editQuiz.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>

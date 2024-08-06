@@ -42,6 +42,7 @@ body {
     display: flex;
     height: 115px;
     justify-content: center;
+    column-gap: 20px;
     align-items: end;
     bottom: 0;
     background: var(--clr);
@@ -165,6 +166,46 @@ body {
 }
 .navigation ul li:nth-child(5).active ~ .indicator {
     transform: translateX(calc(70px * 4));
+}
+
+
+.create-quiz-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: var(--blue);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+.create-quiz-btn:hover {
+    background-color: white;
+    color: var(--blue);
+}
+
+.create-quiz-btn a ion-icon {
+    font-size: 2em;
+    font-weight: 500;
+    color: var(--clr);
+}
+
+.create-quiz-btn a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    text-decoration: none;
+}
+
+.create-quiz-btn-decoy {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: var(--clr);
 }
 
 

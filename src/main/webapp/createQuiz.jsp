@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-    <title>Quiz - Edit</title>
+    <title>Quiz - Create</title>
     <link rel="stylesheet" href="../../css/createQuiz.css">
 </head>
 <body>
