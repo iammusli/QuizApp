@@ -16,7 +16,7 @@ public class Answer {
     
     private String answer_text;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     
     private Question question;
 

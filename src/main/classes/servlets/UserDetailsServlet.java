@@ -4,12 +4,18 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import dao.UserDAO;
+import entities.Answer;
+import entities.Question;
+import entities.Quiz;
 import entities.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import utils.AnswerSerializer;
+import utils.QuestionSerializer;
+import utils.QuizSerializer;
 import utils.UserSerializer;
 
 import java.io.BufferedReader;
@@ -39,9 +45,10 @@ public class UserDetailsServlet extends HttpServlet {
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
 
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(User.class, new UserSerializer())
-                    .create();
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.excludeFieldsWithoutExposeAnnotation();
+            gsonBuilder.registerTypeAdapter(User.class, new UserSerializer());
+            Gson gson = gsonBuilder.create();
 
             System.out.println("User list data to serialize: " + userList);
 

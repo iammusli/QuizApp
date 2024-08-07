@@ -4,6 +4,7 @@ package entities;
 import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,20 +12,20 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+    @Expose
     private int id;
     @Column( name = "username", unique = true, nullable = false )
-
+    @Expose
     private String username;
     @Column ( name = "password", nullable = false )
 
     private String password;
     @Column ( name = "is_admin")
-
+    @Expose
     private boolean isAdmin;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Quiz> quizzes;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Quiz> quizzes = new ArrayList<>();
 
     public User() {}
 

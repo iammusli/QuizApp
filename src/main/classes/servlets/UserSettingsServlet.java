@@ -34,9 +34,10 @@ public class UserSettingsServlet extends HttpServlet {
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
 
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(User.class, new UserSerializer())
-                    .create();
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.excludeFieldsWithoutExposeAnnotation();
+            gsonBuilder.registerTypeAdapter(User.class, new UserSerializer());
+            Gson gson = gsonBuilder.create();
 
             System.out.println("User data to serialize: " + user);
 
