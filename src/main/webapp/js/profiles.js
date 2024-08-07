@@ -146,7 +146,7 @@ $(document).ready(function() {
                         }),
                         success: function(data) {
                             alert("Profile updated successfully!");
-                            location.reload(); // Reload to reflect changes
+                            location.reload();
                         },
                         error: function(xhr, status, error) {
                             console.error('Error updating profile:', status, error);

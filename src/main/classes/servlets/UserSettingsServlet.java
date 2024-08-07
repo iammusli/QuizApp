@@ -88,3 +88,49 @@ public class UserSettingsServlet extends HttpServlet {
     }
 
 }
+/*
+
+@Override
+protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    System.out.println("Entered UserSettingsServlet doPost");
+
+    User user = (User) req.getSession().getAttribute("user");
+    if (user != null) {
+        System.out.println("User is not null");
+
+        BufferedReader reader = req.getReader();
+        StringBuilder jsonBuilder = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            jsonBuilder.append(line);
+        }
+        String jsonString = jsonBuilder.toString();
+
+        Gson gson = new Gson();
+        JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
+        String newUsername = jsonObject.get("username").getAsString();
+        String newPassword = jsonObject.get("password").getAsString();
+
+        if (newUsername != null && !newUsername.isEmpty()) {
+            user.setUsername(newUsername);
+        }
+
+        if (newPassword != null && !newPassword.isEmpty()) {
+            user.setPassword(newPassword);
+        }
+
+        userService.updateUser(user);
+
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+
+        String json = gson.toJson(user);
+        resp.getWriter().write(json);
+    } else {
+        System.out.println("User is null");
+
+        resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+    }
+}
+
+ */

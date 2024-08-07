@@ -34,10 +34,11 @@ $(document).ready(function() {
                     $.ajax({
                         url: '/rwa/admin/settings',
                         type: 'POST',
-                        data: {
+                        contentType: 'application/json',
+                        data: JSON.stringify({
                             username: $('#newUsername').val(),
                             password: $('#newPassword').val()
-                        },
+                        }),
                         success: function(data) {
                             alert("Settings updated successfully!");
                         },

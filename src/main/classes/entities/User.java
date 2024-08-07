@@ -11,16 +11,16 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
+
     private int id;
     @Column( name = "username", unique = true, nullable = false )
-    
+
     private String username;
     @Column ( name = "password", nullable = false )
-    
+
     private String password;
     @Column ( name = "is_admin")
-    
+
     private boolean isAdmin;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
