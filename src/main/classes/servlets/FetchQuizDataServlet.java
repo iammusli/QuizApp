@@ -38,9 +38,10 @@ public class FetchQuizDataServlet extends HttpServlet {
         user = (User) request.getSession().getAttribute("user");
         ArrayList<Quiz> quizzes = new ArrayList<>();
         quizzes = quizService.getAllQuizFromCreator(user.getId());
-        Gson gson = new GsonBuilder()
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.excludeFieldsWithoutExposeAnnotation();
+        Gson gson = gsonBuilder
                 .registerTypeAdapter(Quiz.class, new QuizSerializer())
-                .registerTypeAdapter(User.class, new UserSerializer())
                 .registerTypeAdapter(Question.class, new QuestionSerializer())
                 .registerTypeAdapter(Answer.class, new AnswerSerializer())
                 .create();
