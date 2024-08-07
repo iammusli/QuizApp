@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 public class UserSerializer implements JsonSerializer<User> {
     @Override
     public JsonElement serialize(User user, Type typeOfSrc, JsonSerializationContext context) {
+        System.out.println("Serializing user: " + user.getUsername());
         JsonObject jsonUser = new JsonObject();
         jsonUser.addProperty("id", user.getId());
         jsonUser.addProperty("username", user.getUsername());

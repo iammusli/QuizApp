@@ -5,6 +5,7 @@ $(document).ready(function() {
             type: 'GET',
             dataType: 'json',
             success: function(data) {
+                console.log("Received JSON:", data);
                 const userListHtml = data.map(user => `
                     <div class="profile-user" data-id="${user.id}" data-username="${user.username}" data-password="${user.password}" data-rank="#${user.id}" data-games="100" data-points="500" data-completion="75%" data-correct="70%" data-incorrect="30%">${user.username}</div>
                 `).join('');
