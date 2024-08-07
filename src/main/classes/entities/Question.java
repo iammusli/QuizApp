@@ -25,7 +25,7 @@ public class Question {
     
     private String question;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     
     private Quiz quiz;
 

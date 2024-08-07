@@ -6,6 +6,7 @@ import entities.Quiz;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import java.util.ArrayList;
+import java.util.List;
 
 public class QuizDAO extends AbstractDAO {
 
@@ -95,6 +96,40 @@ public class QuizDAO extends AbstractDAO {
             }
         }
         return null;
+    }
+
+    public boolean deleteQuizById(int id) {
+        EntityManager em = createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query quiz = em.createQuery("DELETE FROM Quiz q WHERE q.id = :id");
+            Query question = em.createQuery("DELETE FROM Question q WHERE q.quiz.id = :id");
+            List<Question> questions = (List<Question>) findQuestionsByQuizId(id);
+            List<Answer> answers = new ArrayList<>();
+            for(Question q : questions) {
+                answers.addAll(findAnswersByQuestionId(q.getId()));
+            }
+            for(Answer a : answers) {
+                Query answer = em.createQuery("DELETE FROM Answer q WHERE q.id = :id");
+                answer.setParameter("id", a.getId());
+                answer.executeUpdate();
+            }
+            quiz.setParameter("id", id);
+            question.setParameter("id", id);
+            question.executeUpdate();
+            quiz.executeUpdate();
+            em.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+        } finally {
+            if(em != null) {
+                em.close();
+            }
+        }
+        return false;
     }
 
     public void saveQuiz(Quiz quiz) {

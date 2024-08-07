@@ -22,6 +22,10 @@ public class QuizService {
         return quizDAO.findQuizById(quizId);
     }
 
+    public boolean removeQuizByID(int quizID) {
+        return quizDAO.deleteQuizById(quizID);
+    }
+
     public void saveQuiz(Quiz quiz) {
         quizDAO.saveQuiz(quiz);
     }

@@ -1,4 +1,4 @@
-quizData = {
+const quizData = {
     id: "1",
     category: "Quiz category",
     name: "Quiz name",
@@ -86,9 +86,32 @@ function makeQuizCard(quizData) {
     });
     buttonEdit.addEventListener("click", function(){
         console.log("Edit quiz");
+        window.href = "/rwa/admin/quizzes/edit?quizID=" + quizData.id;
     });
-    buttonDelete.addEventListener("click", function(){
-        console.log("Delete quiz");
+    buttonDelete.addEventListener("click", function() {
+        var id = this.parentElement.parentElement.id;
+        console.log("Delete quiz " + id);
+
+        fetch(`/rwa/admin/quizzes/delete?quizId=${id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                }
+            })
+            .then(data => {
+                console.log("Quiz deleted successfully.", data);
+                var box = this.parentElement.parentElement.parentElement;
+                box.parentElement.removeChild(box);
+            })
+            .catch(error => {
+                console.error("Request failed:", error);
+                // Optionally, show an error message to the user
+            });
     });
 
     var linkEdit = document.createElement("a");
