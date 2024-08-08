@@ -44,7 +44,7 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
-    align-items: flex-start;
+    align-items: stretch;
 }
 
 .quiz-header {
@@ -68,11 +68,17 @@ body {
 }
 
 .quiz-question {
-    position: rel;
+    position: relative;
     font-size: 20px;
     margin: 50px 0;
     flex-shrink: 0;
     padding-left: 20px;
+    width: calc(100% - 130px);
+    align-items: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
 }
 
 .quiz-options-container {
@@ -89,10 +95,8 @@ body {
     grid-template-rows: repeat(auto-fill, minmax(60px, auto));
     gap: 10px;
     justify-content: center;
-    height: fit-content;
     width: 100%;
-    margin-top: auto;
-    margin-bottom: auto;
+    margin: auto 0;
 }
 
 @media (max-width: 600px) {
@@ -192,18 +196,18 @@ body {
 .players-circle i {
     margin-right: 5px;
 }
-.quiz-question {
-    position: relative;
-}
+
 
 .quiz-timer {
     display: flex;
     position: absolute;
-    top: 127.5px;
+    top: 23%;
+    transform:none;
     right: 15px;
-    margin-right: 5px;
+    margin-right: 10px;
     align-items: center;
     justify-content: center;
+    margin-left: auto;
 }
 
 .circle-container {
