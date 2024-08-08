@@ -70,7 +70,7 @@ body {
 .quiz-question {
     position: rel;
     font-size: 20px;
-    margin: 40px 0;
+    margin: 50px 0;
     flex-shrink: 0;
     padding-left: 20px;
 }
@@ -199,7 +199,7 @@ body {
 .quiz-timer {
     display: flex;
     position: absolute;
-    top: 117.5px;
+    top: 127.5px;
     right: 15px;
     margin-right: 5px;
     align-items: center;
