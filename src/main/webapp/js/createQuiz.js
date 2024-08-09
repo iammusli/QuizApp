@@ -36,31 +36,31 @@ quizCategory.addEventListener("input", function(e){
 createQuestion.addEventListener("click", function(){
     var question = document.createElement("div");
     question.classList.add("question-wrapper");
-    question.innerHTML = '<div class="question">' +
-        '<input type="text" class="question-input" placeholder="Quiz question text">' +
-        '<button class="trash-button"><ion-icon class="trash" name="trash-outline"></ion-icon></button>' +
-        '</div>' +
-        '<div class="answers-wrapper">'+
-        '<div class="answer">'+
-        '<input type="text" class="answer-input" placeholder="Question answer text">'+
-        '<input type="checkbox" class="correct">'+
-        '</div>'+
-        '<div class="answer">'+
-        '<input type="text" class="answer-input" placeholder="Question answer text">'+
-        '<input type="checkbox" class="correct">'+
-        '</div>'+
-        '<div class="answer">'+
-        '<input type="text" class="answer-input" placeholder="Question answer text">'+
-        '<input type="checkbox" class="correct">'+
-        '</div>'+
-        '<div class="answer">'+
-        '<input type="text" class="answer-input" placeholder="Question answer text">'+
-        '<input type="checkbox" class="correct">'+
-        '</div>'+
-        '</div>'+
-        '<div class="arrow">'+
-        '<ion-icon class="down-arrow" name="chevron-down-outline"></ion-icon>'+
-        '</div>';
+    question.innerHTML = `<div class="question">
+        <input type="text" class="question-input" placeholder="Quiz question text">
+        <button class="trash-button"><ion-icon class="trash" name="trash-outline"></ion-icon></button>
+        </div> 
+        <div class="answers-wrapper">
+        <div class="answer">
+        <input type="text" class="answer-input" placeholder="Question answer text">
+        <input type="checkbox" class="correct">
+        </div>
+        <div class="answer">
+        <input type="text" class="answer-input" placeholder="Question answer text">
+        <input type="checkbox" class="correct">
+        </div>
+        <div class="answer">
+        <input type="text" class="answer-input" placeholder="Question answer text">
+        <input type="checkbox" class="correct">
+        </div>
+        <div class="answer">
+        <input type="text" class="answer-input" placeholder="Question answer text">
+        <input type="checkbox" class="correct">
+        </div>
+        </div>
+        <div class="arrow">
+        <ion-icon class="down-arrow" name="chevron-down-outline"></ion-icon>
+        </div>`;
     questionContainer.appendChild(question);
 
     questionNumber.textContent = questionContainer.childElementCount + " questions";

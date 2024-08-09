@@ -19,7 +19,7 @@
             <div id="left-side-content">
                 <div class="left-side-quiz-space" >
                     <div class="headline">
-                        <h1>Create a quiz</h1>
+                        <h1>Edit quiz</h1>
                     </div>
                     <div class="quiz-space">
                         <div class="quiz-details">
@@ -30,8 +30,7 @@
                         </div>
                         <div class="quiz-buttons">
                             <button id="create-question-btn" class="button">Create question</button>
-                            <button id="create-quiz-btn" class="button">Create quiz</button>
-
+                            <button id="create-quiz-btn" class="button">Update quiz</button>
                         </div>
                     </div>
                 </div>
@@ -46,14 +45,14 @@
                 <div id="id" class="card">
                     <div class="front">
                         <div class="quiz-category">
-                            <h3 class="quiz-category"></h3>
+                            <h3 id="quiz-card-category" class="quiz-category"></h3>
                         </div>
                         <div>
                             <img class="quiz-picture" src = "../../assets/background1.jpg" alt="bg">
                         </div>
                         <div class="quiz-details">
-                            <h3 class="quiz-name"></h3>
-                            <h5 class="question-number"></h5>
+                            <h3 id="quiz-card-name" class="quiz-name"></h3>
+                            <h5 id="quiz-card-question-number" class="question-number"></h5>
                         </div>
                     </div>
                 </div>
@@ -61,6 +60,7 @@
         </div>
     </div>
 </div>
+<div id="jsonData" data-json='<%= request.getAttribute("jsonData") %>' style="display: none;"></div>
 <script src="../../js/editQuiz.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

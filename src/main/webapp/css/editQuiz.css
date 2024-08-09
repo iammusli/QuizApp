@@ -132,7 +132,7 @@
 .answers-wrapper {
     display: none;
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(1fr, 4);
+    grid-template-rows: repeat(4, 1fr);
     border-radius: 15px;
     padding: 10px 15px;
     gap: 5px;

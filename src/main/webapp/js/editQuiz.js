@@ -1,189 +1,116 @@
 
 
-var quizName = document.getElementById("quiz-name");
-var quizCategory = document.getElementById("quiz-category");
-var cardName = document.getElementById("quiz-card-name");
-var cardCategory = document.getElementById("quiz-card-category");
-var createQuestion = document.getElementById("create-question-btn");
-var createQuiz = document.getElementById("create-quiz-btn");
-var questionContainer = document.querySelector(".question-container");
-var questionNumber = document.getElementById("question-number");
-var filled = false;
-var questions = document.querySelectorAll('.question-wrapper');
-var arrows = document.querySelectorAll('.arrow');
+window.onload = function(){
+    var jsonData = document.getElementById("jsonData").getAttribute("data-json");
+    var quizData = JSON.parse(jsonData);
+    console.log(quizData);
 
-arrows.forEach((arrow) => {
-    arrow.addEventListener("click", function(event){
-        event.stopPropagation();
-        var answers = this.previousElementSibling;
-        if(answers.classList.contains("selected")){
-            answers.classList.remove("selected");
-            arrow.innerHTML = '<ion-icon name="chevron-down-outline"></ion-icon>';
-        } else {
-            answers.classList.add("selected");
-            arrow.innerHTML = '<ion-icon name="chevron-up-outline"></ion-icon>';
-        }
+
+    var quizName = document.getElementById("quiz-name");
+    var quizCategory = document.getElementById("quiz-category");
+    var cardQuestionNumber = document.getElementById("quiz-card-question-number");
+    var cardName = document.getElementById("quiz-card-name");
+    var cardCategory = document.getElementById("quiz-card-category");
+    var filled = false;
+
+    quizName.value = quizData.title;
+    quizCategory.value = quizData.category;
+
+    cardName.textContent = quizData.title;
+    cardQuestionNumber.textContent = quizData.questions.length + " questions";
+    cardCategory.textContent = quizData.category;
+
+    quizName.addEventListener("input", function(e){
+        cardName.textContent = e.target.value;
     });
-});
-
-quizName.addEventListener("input", function(e){
-    cardName.textContent = e.target.value;
-});
-quizCategory.addEventListener("input", function(e){
-    cardCategory.textContent = e.target.value;
-});
-
-createQuestion.addEventListener("click", function(){
-    var question = document.createElement("div");
-    question.classList.add("question-wrapper");
-    question.innerHTML = '<div class="question">' +
-        '<input type="text" class="question-input" placeholder="Quiz question text">' +
-        '<button class="trash-button"><ion-icon class="trash" name="trash-outline"></ion-icon></button>' +
-        '</div>' +
-        '<div class="answers-wrapper">'+
-        '<div class="answer">'+
-        '<input type="text" class="answer-input" placeholder="Question answer text">'+
-        '<input type="checkbox" class="correct">'+
-        '</div>'+
-        '<div class="answer">'+
-        '<input type="text" class="answer-input" placeholder="Question answer text">'+
-        '<input type="checkbox" class="correct">'+
-        '</div>'+
-        '<div class="answer">'+
-        '<input type="text" class="answer-input" placeholder="Question answer text">'+
-        '<input type="checkbox" class="correct">'+
-        '</div>'+
-        '<div class="answer">'+
-        '<input type="text" class="answer-input" placeholder="Question answer text">'+
-        '<input type="checkbox" class="correct">'+
-        '</div>'+
-        '</div>'+
-        '<div class="arrow">'+
-        '<ion-icon class="down-arrow" name="chevron-down-outline"></ion-icon>'+
-        '</div>';
-    questionContainer.appendChild(question);
-
-    questionNumber.textContent = questionContainer.childElementCount + " questions";
-
-    question.querySelector('.question-input').addEventListener('input', updateBackground);
-
-    question.querySelector(".trash-button").addEventListener("click", function(){
-        question.classList.add('fade-out');
-
-        setTimeout(() => {
-            questionContainer.removeChild(question);
-            questionNumber.textContent = questionContainer.childElementCount + " questions";
-        }, 500);
+    quizCategory.addEventListener("input", function(e){
+        cardCategory.textContent = e.target.value;
     });
 
-    var answerInputs = question.querySelectorAll('.answer-input');
-    answerInputs.forEach(input => {
-        input.addEventListener('input', updateBackground);
-    });
 
-    var checkboxes = question.querySelectorAll('.correct');
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', updateBackground);
-    });
+    var questionContainer = document.querySelector(".question-container");
 
-    question.lastElementChild.addEventListener("click", function(event) {
-        event.stopPropagation();
-        var answers = this.previousElementSibling;
-        if (answers.classList.contains("selected")) {
-            answers.classList.remove("selected");
-            this.innerHTML = '<ion-icon name="chevron-down-outline"></ion-icon>';
-        } else {
-            answers.classList.add("selected");
-            this.innerHTML = '<ion-icon name="chevron-up-outline"></ion-icon>';
-        }
-    });
+    var createQuestionBtn = document.getElementById("create-question-btn");
+    createQuestionBtn.addEventListener("click", createQuestion);
 
-    function updateBackground() {
-        filled = true;
+    for(let i = 0; i < quizData.questions.length; ++i){
+        createQuestion(quizData.questions[i]);
+    }
 
-        if (question.firstElementChild.firstElementChild.value === "") filled = false;
 
-        var answers = question.querySelectorAll(".answer");
-        answers.forEach((answer) => {
-            if (answer.firstElementChild.value === "") filled = false;
+    function createQuestion(questionData) {
+        var questionWrapper = document.createElement("div");
+        questionWrapper.classList.add("question-wrapper");
+        questionContainer.appendChild(questionWrapper);
+        var question = document.createElement("div");
+        question.classList.add("question");
+
+        questionWrapper.appendChild(question);
+        question.innerHTML = `<input type="text" class="question-input" placeholder="Quiz question text">
+        <button class="trash-button"><ion-icon class="trash" name="trash-outline"></ion-icon></button>
+        </div> 
+        <div class="answers-wrapper">
+        <div class="answer">
+        <input type="text" class="answer-input" placeholder="Question answer text">
+        <input type="checkbox" class="correct">
+        </div>
+        <div class="answer">
+        <input type="text" class="answer-input" placeholder="Question answer text">
+        <input type="checkbox" class="correct">
+        </div>
+        <div class="answer">
+        <input type="text" class="answer-input" placeholder="Question answer text">
+        <input type="checkbox" class="correct">
+        </div>
+        <div class="answer">
+        <input type="text" class="answer-input" placeholder="Question answer text">
+        <input type="checkbox" class="correct">
+        </div>
+        </div>
+        <div class="arrow">
+        <ion-icon class="down-arrow" name="chevron-down-outline"></ion-icon>`;
+
+        var questionText = question.querySelector(".question-input");
+        var trashButton = question.querySelector(".trash-button");
+        var answerInputs = question.querySelectorAll(".answer-input");
+        var checkboxes = question.querySelectorAll(".correct");
+        var arrow = question.querySelector('.arrow');
+
+
+
+        arrow.addEventListener("click", function (event) {
+            event.stopPropagation();
+            var answers = this.previousElementSibling;
+            if (answers.classList.contains("selected")) {
+                answers.classList.remove("selected");
+                arrow.innerHTML = '<ion-icon name="chevron-down-outline"></ion-icon>';
+            } else {
+                answers.classList.add("selected");
+                arrow.innerHTML = '<ion-icon name="chevron-up-outline"></ion-icon>';
+            }
         });
 
-        var checkboxes = question.querySelectorAll('input[type="checkbox"]');
-        if (![...checkboxes].some(checkbox => checkbox.checked)) filled = false;
+        trashButton.addEventListener("click", function(){
+            question.parentNode.classList.add('fade-out');
 
-        question.setAttribute("style", "background-color: " + (filled ? "var(--green)" : "var(--red)") + ";");
+            setTimeout(() => {
+                questionContainer.removeChild(question.parentNode);
+                questionNumber.textContent = questionContainer.childElementCount + " questions";
+            }, 500);
+        });
 
-        return filled;
-    }
-
-    updateBackground();
-});
-
-createQuiz.addEventListener("click", function(){
-    if(filled){
-        let QUIZ = new Quiz(quizName.value, quizCategory.value, []);
-
-        questions = questionContainer.querySelectorAll(".question-wrapper");
-
-        for(let i = 0; i < questions.length; ++i){
-            let answers = questions[i].querySelectorAll(".answer-input");
-            let checkboxes = questions[i].querySelectorAll(".correct");
-            QUIZ.addQuestion(new Question(60, 10,questions[i].firstElementChild.firstElementChild.value, []));
-            for(let j = 0; j < 4; ++j){
-                QUIZ.questions[i].addAnswer(new Answer(answers[j].value, checkboxes[j].checked ));
+        if(arguments.length !== 0){
+            questionText.value = questionData.question;
+            for (let i = 0; i < answerInputs.length; ++i) {
+                answerInputs[i].value = questionData.answers[i].answer_text;
+                checkboxes[i].checked = questionData.answers[i].correct;
             }
         }
-        let xhr = new XMLHttpRequest();
-        let json = JSON.stringify(QUIZ);
-        xhr.open("POST", "/rwa/admin/quizzes/create", true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function (){
-            if(xhr.status !== 200){
-                console.error(`Error ${xhr.status}: ${xhr.statusText}`);
-            } else {
-
-            }
-        }
-        xhr.onerror = function (){
-            console.error("Request failed");
-        };
-        xhr.send("quiz=" + json);
-    } else {
-        console.log("quiz not filled properly");
     }
-})
-
-function Quiz(title, category ,questions){
-    this.title = title;
-    this.category = category;
-    this.questions = questions;
 }
 
-Quiz.prototype.addQuestion = function(question){
-    this.questions.push(question);
-}
 
-function Question(seconds, points, question, answers){
-    this.seconds = seconds;
-    this.points = points;
-    this.question = question;
-    this.answers = answers;
-}
 
-Question.prototype.addAnswer = function(answer){
-    this.answers.push(answer);
-}
-
-function Answer(answer_text, correct){
-    this.answer_text = answer_text;
-    this.correct = correct;
-}
-
-function User(id, username, isAdmin){
-    this.id = id;
-    this.username = username;
-    this.isAdmin = isAdmin;
-}
 
 
 
