@@ -184,4 +184,23 @@ public class QuizDAO extends AbstractDAO {
         return -1;
     }
 
+    public boolean updateQuiz(Quiz quiz) {
+        EntityManager em = createEntityManager();
+        try{
+            em.getTransaction().begin();
+            em.persist(quiz);
+            em.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+        } finally {
+            if(em != null) {
+                em.close();
+            }
+        }
+        return false;
+    }
+
 }

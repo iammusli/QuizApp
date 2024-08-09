@@ -1,6 +1,6 @@
 
 
-window.onload = function(){
+document.addEventListener("DOMContentLoaded", function(){
     var jsonData = document.getElementById("jsonData").getAttribute("data-json");
     var quizData = JSON.parse(jsonData);
     console.log(quizData);
@@ -28,25 +28,34 @@ window.onload = function(){
     });
 
 
-    var questionContainer = document.querySelector(".question-container");
+
 
     var createQuestionBtn = document.getElementById("create-question-btn");
-    createQuestionBtn.addEventListener("click", createQuestion);
+    createQuestionBtn.addEventListener("click", function (){
+        createQuestion();
+    });
+    var createQuizBtn = document.getElementById("create-quiz-btn");
+    createQuizBtn.addEventListener('click', function (){
+        createQuiz(quizData.id);
+    });
 
-    for(let i = 0; i < quizData.questions.length; ++i){
+    for(let i = 0; i < quizData.questions.length; i++){
         createQuestion(quizData.questions[i]);
     }
+});
 
+function createQuestion(questionData) {
 
-    function createQuestion(questionData) {
-        var questionWrapper = document.createElement("div");
-        questionWrapper.classList.add("question-wrapper");
-        questionContainer.appendChild(questionWrapper);
-        var question = document.createElement("div");
-        question.classList.add("question");
+    var questionContainer = document.querySelector(".question-container");
+    var questionWrapper = document.createElement("div");
+    var cardQuestionNumber = document.getElementById("quiz-card-question-number");
+    questionWrapper.classList.add("question-wrapper");
+    questionContainer.appendChild(questionWrapper);
+    var question = document.createElement("div");
+    question.classList.add("question");
 
-        questionWrapper.appendChild(question);
-        question.innerHTML = `<input type="text" class="question-input" placeholder="Quiz question text">
+    questionWrapper.appendChild(question);
+    question.innerHTML = `<input type="text" class="question-input" placeholder="Quiz question text">
         <button class="trash-button"><ion-icon class="trash" name="trash-outline"></ion-icon></button>
         </div> 
         <div class="answers-wrapper">
@@ -70,44 +79,163 @@ window.onload = function(){
         <div class="arrow">
         <ion-icon class="down-arrow" name="chevron-down-outline"></ion-icon>`;
 
-        var questionText = question.querySelector(".question-input");
-        var trashButton = question.querySelector(".trash-button");
-        var answerInputs = question.querySelectorAll(".answer-input");
-        var checkboxes = question.querySelectorAll(".correct");
-        var arrow = question.querySelector('.arrow');
+    var questionText = question.querySelector(".question-input");
+    var trashButton = question.querySelector(".trash-button");
+    var answerInputs = question.querySelectorAll(".answer-input");
+    var checkboxes = question.querySelectorAll(".correct");
+    var arrow = question.querySelector('.arrow');
 
 
+    questionText.addEventListener('input', updateBackground);
+    cardQuestionNumber.textContent = questionContainer.childElementCount + " questions";
 
-        arrow.addEventListener("click", function (event) {
-            event.stopPropagation();
-            var answers = this.previousElementSibling;
-            if (answers.classList.contains("selected")) {
-                answers.classList.remove("selected");
-                arrow.innerHTML = '<ion-icon name="chevron-down-outline"></ion-icon>';
-            } else {
-                answers.classList.add("selected");
-                arrow.innerHTML = '<ion-icon name="chevron-up-outline"></ion-icon>';
-            }
-        });
+    arrow.addEventListener("click", function (event) {
+        event.stopPropagation();
+        var answers = this.previousElementSibling;
+        if (answers.classList.contains("selected")) {
+            answers.classList.remove("selected");
+            arrow.innerHTML = '<ion-icon name="chevron-down-outline"></ion-icon>';
+        } else {
+            answers.classList.add("selected");
+            arrow.innerHTML = '<ion-icon name="chevron-up-outline"></ion-icon>';
+        }
+    });
 
-        trashButton.addEventListener("click", function(){
-            question.parentNode.classList.add('fade-out');
+    trashButton.addEventListener("click", function(){
+        question.parentNode.classList.add('fade-out');
 
-            setTimeout(() => {
-                questionContainer.removeChild(question.parentNode);
-                questionNumber.textContent = questionContainer.childElementCount + " questions";
-            }, 500);
-        });
+        setTimeout(() => {
+            questionContainer.removeChild(question.parentNode);
+            cardQuestionNumber.textContent = questionContainer.childElementCount + " questions";
+        }, 500);
+    });
 
-        if(arguments.length !== 0){
-            questionText.value = questionData.question;
-            for (let i = 0; i < answerInputs.length; ++i) {
-                answerInputs[i].value = questionData.answers[i].answer_text;
-                checkboxes[i].checked = questionData.answers[i].correct;
-            }
+    console.log(questionData);
+
+    if(questionData === undefined){
+        questionText.value = "";
+        for(let i = 0; i < 4; ++i){
+            answerInputs[i].addEventListener('input', updateBackground);
+            checkboxes[i].addEventListener('change', updateBackground);
+        }
+    } else {
+        questionText.value = questionData.question || "";
+        for (let i = 0; i < 4; ++i) {
+            answerInputs[i].value = questionData.answers[i].answer_text;
+            checkboxes[i].checked = questionData.answers[i].correct;
+
+            answerInputs[i].addEventListener('input', updateBackground);
+            checkboxes[i].addEventListener('change', updateBackground);
         }
     }
+
+    updateBackground();
+
+    function updateBackground() {
+        filled = true;
+
+        if (question.firstElementChild.value === "") filled = false;
+
+        var answers = question.querySelectorAll(".answer");
+        answers.forEach((answer) => {
+            if (answer.firstElementChild.value === "") filled = false;
+        });
+
+        var checkboxes = question.querySelectorAll('input[type="checkbox"]');
+        if (![...checkboxes].some(checkbox => checkbox.checked)) filled = false;
+
+        question.parentNode.setAttribute("style", "background-color: " + (filled ? "var(--green)" : "var(--red)") + ";");
+
+        return filled;
+    }
 }
+
+function createQuiz(id){
+    var filled = true;
+    var quizName = document.getElementById("quiz-name");
+    var quizCategory = document.getElementById("quiz-category");
+    var questions = document.querySelectorAll(".question-input");
+
+    if(quizName.value === "") filled = false;
+    if(quizCategory.value === "") filled = false;
+    questions.forEach((question) => {
+        if(question.value === "") filled = false;
+    });
+    var answers = document.querySelectorAll(".answer");
+    answers.forEach((answer) => {
+        if (answer.firstElementChild.value === "") filled = false;
+    });
+
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    if (![...checkboxes].some(checkbox => checkbox.checked)) filled = false;
+    if(filled){
+        var quizName = document.getElementById("quiz-name");
+        var quizCategory = document.getElementById("quiz-category");
+        let QUIZ = new Quiz(quizName.value, quizCategory.value, []);
+
+        var questionContainer = document.querySelector(".question-container");
+        questions = questionContainer.querySelectorAll(".question-wrapper");
+
+        for(let i = 0; i < questions.length; ++i){
+            let answers = questions[i].querySelectorAll(".answer-input");
+            let checkboxes = questions[i].querySelectorAll(".correct");
+            QUIZ.addQuestion(new Question(60, 10,questions[i].firstElementChild.firstElementChild.value, []));
+            for(let j = 0; j < 4; ++j){
+                QUIZ.questions[i].addAnswer(new Answer(answers[j].value, checkboxes[j].checked ));
+            }
+        }
+        let xhr = new XMLHttpRequest();
+        let json = JSON.stringify(QUIZ);
+        xhr.open("POST", "/rwa/admin/quizzes/edit", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function (){
+            if(xhr.status !== 200){
+                console.error(`Error ${xhr.status}: ${xhr.statusText}`);
+            } else {
+                window.location.href = "/rwa/admin/home";
+            }
+        }
+        xhr.onerror = function (){
+            console.error("Request failed");
+        };
+        xhr.send("quiz=" + json);
+    } else {
+        console.log("quiz not filled properly");
+    }
+}
+
+function Quiz(title, category ,questions){
+    this.title = title;
+    this.category = category;
+    this.questions = questions;
+}
+
+Quiz.prototype.addQuestion = function(question){
+    this.questions.push(question);
+}
+
+function Question(seconds, points, question, answers){
+    this.seconds = seconds;
+    this.points = points;
+    this.question = question;
+    this.answers = answers;
+}
+
+Question.prototype.addAnswer = function(answer){
+    this.answers.push(answer);
+}
+
+function Answer(answer_text, correct){
+    this.answer_text = answer_text;
+    this.correct = correct;
+}
+
+function User(id, username, isAdmin){
+    this.id = id;
+    this.username = username;
+    this.isAdmin = isAdmin;
+}
+
 
 
 

@@ -37,4 +37,8 @@ public class QuizService {
     public int saveAnswer(Answer answer) {
         return quizDAO.saveAnswer(answer);
     }
+
+    public boolean updateQuiz(Quiz quiz) {
+        return quizDAO.updateQuiz(quiz);
+    }
 }
