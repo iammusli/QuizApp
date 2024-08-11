@@ -1,3 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="utils.QuizDTO, utils.QuestionDTO, utils.AnswerDTO" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,6 +19,7 @@
                 <p>Kategorija</p>
             </div>
             <div class="quiz-question">
+
                 <p>Neko pitanje?</p>
 
             </div>
@@ -55,7 +58,7 @@
         </div>
     </div>
 </div>
-<script src="timer.js"></script>
+<script src="js/timer.js"></script>
 
 </body>
 </html>

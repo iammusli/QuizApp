@@ -22,6 +22,14 @@ public class QuizService {
         return quizDAO.findQuizById(quizId);
     }
 
+    public ArrayList<Question> getQuestionsByQuizId(int quizId) {
+        return quizDAO.findQuestionsByQuizId(quizId);
+    }
+
+    public ArrayList<Answer> getAnswersByQuestionId(int questionId) {
+        return quizDAO.findAnswersByQuestionId(questionId);
+    }
+
     public boolean removeQuizByID(int quizID) {
         return quizDAO.deleteQuizById(quizID);
     }
