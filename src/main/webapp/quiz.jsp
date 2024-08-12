@@ -11,17 +11,18 @@
     />
 </head>
 <body>
+<%
+    QuizDTO quizDTO = (QuizDTO) request.getAttribute("quiz");
+%>
 <div class="container">
     <div class="content">
         <div class="quiz-card" id="quiz-card">
             <div class="quiz-header">
-                <h1>Naziv kviza</h1>
-                <p>Kategorija</p>
+                <h1><%= quizDTO.getTitle() %></h1>
+                <p><%= quizDTO.getCategory() %></p>
             </div>
             <div class="quiz-question">
-
-                <p>Neko pitanje?</p>
-
+                <p id="question-text"><%= quizDTO.getQuestions().get(0).getQuestion() %></p>
             </div>
             <div class="quiz-timer">
                 <div class="circle-container">
@@ -36,7 +37,7 @@
             </div>
             <div class="quiz-info-bar">
                 <div class="points">
-                    <i class="fas fa-star"></i> <span id="points">10 Points</span>
+                    <i class="fas fa-star"></i> <span id="points"><%= quizDTO.getQuestions().get(0).getPoints() %> Points</span>
                 </div>
             </div>
             <div class="players-circle">
@@ -44,21 +45,24 @@
             </div>
 
             <div class="quiz-options">
-                <button class="quiz-option">odg1</button>
-                <button class="quiz-option">odg2</button>
-                <button class="quiz-option">odg1</button>
-
+                <%
+                    for (AnswerDTO answer : quizDTO.getQuestions().get(0).getAnswers()) {
+                %>
+                <button class="quiz-option"><%= answer.getAnswer_text() %></button>
+                <%
+                    }
+                %>
             </div>
             <div class="quiz-footer">
                 <button id="next-question">Next Question</button>
                 <div class="quiz-info">
-                    <p>Question 1 of 10</p>
+                    <p>Question 1 of <%= quizDTO.getQuestions().size() %></p>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
 <script src="js/timer.js"></script>
-
 </body>
 </html>
