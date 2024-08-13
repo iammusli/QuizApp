@@ -13,6 +13,9 @@
 <body>
 <%
     QuizDTO quizDTO = (QuizDTO) request.getAttribute("quiz");
+    if (quizDTO == null || quizDTO.getQuestions().isEmpty()) {
+        throw new IllegalStateException("Quiz data is not available or empty.");
+    }
 %>
 <div class="container">
     <div class="content">
@@ -44,7 +47,7 @@
                 <i class="fas fa-users"></i> <span id="players">5</span>
             </div>
 
-            <div class="quiz-options">
+            <div class="quiz-options" id="quiz-options">
                 <%
                     for (AnswerDTO answer : quizDTO.getQuestions().get(0).getAnswers()) {
                 %>
@@ -56,13 +59,17 @@
             <div class="quiz-footer">
                 <button id="next-question">Next Question</button>
                 <div class="quiz-info">
-                    <p>Question 1 of <%= quizDTO.getQuestions().size() %></p>
+                    <p>Question <span id="current-question-number">1</span> of <%= quizDTO.getQuestions().size() %></p>
                 </div>
             </div>
 
         </div>
     </div>
 </div>
+
 <script src="js/timer.js"></script>
+<script>
+    const quizData = <%= new com.google.gson.Gson().toJson(quizDTO) %>;
+</script>
 </body>
 </html>

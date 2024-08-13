@@ -123,7 +123,11 @@ body {
     white-space: normal;
     word-wrap: break-word;
 }
-
+.quiz-option.active {
+    background-color: var(--blue);
+    color: white;
+    border-color: var(--blue-dark);
+}
 .quiz-option:hover {
     background: var(--bg);
 }
