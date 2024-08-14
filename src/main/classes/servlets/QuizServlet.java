@@ -20,7 +20,6 @@ import java.util.List;
 
 @WebServlet(name = "quizServlet", value = "/play")
 public class QuizServlet extends HttpServlet {
-
     private static final long serialVersionUID = 1L;
     private QuizService quizService;
 
