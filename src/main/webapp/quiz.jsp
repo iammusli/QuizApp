@@ -66,11 +66,18 @@
     </div>
 </div>
 
-<script src="js/timer.js"></script>
+
 <script>
-    const quizData = <%= new com.google.gson.Gson().toJson(quizDTO) %>;
-   // initializeQuiz();
+    document.addEventListener("DOMContentLoaded", function(){
+        window.quizData = <%= new com.google.gson.Gson().toJson(quizDTO) %>;
+        console.log("------ LOADING QUIZ DATA ------")
+        console.log(quizData);
+        initializeQuiz();
+    });
+
+    // initializeQuiz();
 
 </script>
+<script src="js/timer.js"></script>
 </body>
 </html>

@@ -141,7 +141,7 @@ function initializeQuiz() {
 document.addEventListener('DOMContentLoaded', () => {
     console.log("JavaScript is loaded and DOM is ready.");
 
-    questions = window.quizData.questions;
+    questions = quizData.questions;
     console.log("Loaded questions:", questions);
     loadQuestion(currentQuestionIndex);
 //pitanja ucitana sa servera i postavljeno trenutno pitanje
