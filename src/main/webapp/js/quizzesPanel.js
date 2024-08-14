@@ -74,7 +74,6 @@ function makeQuizCard(quizData) {
 
     var buttonPlay = document.createElement("button");
     buttonPlay.classList.add("card-button");
-    buttonPlay.textContent = "Play";
     var buttonEdit = document.createElement("button");
     buttonEdit.classList.add("card-button");
     var buttonDelete = document.createElement("button");
@@ -119,6 +118,10 @@ function makeQuizCard(quizData) {
     linkEdit.href = "/rwa/admin/quizzes/edit?quizID=" + quizData.id;
     linkEdit.textContent = "Edit";
 
+    var linkPlay = document.createElement("a");
+    linkPlay.href = "/rwa/play?quizID=" + quizData.id;
+    linkPlay.textContent = "Play";
+
     box.appendChild(card);
     card.appendChild(front);
     card.appendChild(back);
@@ -133,6 +136,7 @@ function makeQuizCard(quizData) {
     back.appendChild(buttonEdit);
     back.appendChild(buttonDelete);
     buttonEdit.appendChild(linkEdit);
+    buttonPlay.appendChild(linkPlay);
 
     return box;
 }
