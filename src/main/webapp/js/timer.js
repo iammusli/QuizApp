@@ -5,7 +5,6 @@ const quizQuestion = document.querySelector('.quiz-question');
 
 let currentQuestionIndex = 0;
 let questions = []; //sadrzi sva pitanja iz quizDTO
-
 //funkcija koja se poziva kada se klikne na opciju - unutar funkcije loadquestion
 function handleOptionClick(event) {
     const clickedButton = event.currentTarget;//sama prepoznaje koji je button u pitanju
@@ -131,6 +130,13 @@ function loadNextQuestion() {
         console.log('No more questions to load');
     }
 }
+function initializeQuiz() {
+    console.log("Initializing quiz.");
+    questions = window.quizData.questions;
+    console.log("Loaded questions:", questions);
+    loadQuestion(currentQuestionIndex);
+}
+
 //izvrsava se kada je doc ucitan i parsiran - kada su svi elementi dostupni za interakciju
 document.addEventListener('DOMContentLoaded', () => {
     console.log("JavaScript is loaded and DOM is ready.");
