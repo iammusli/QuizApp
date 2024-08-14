@@ -73,6 +73,12 @@ function countDownTimer() {
         <div class="colon">:</div>
         <div>00</div>
         `;
+        //disableanje opcija nakon isteka timera
+        const quizOptions = document.querySelectorAll('.quiz-option');
+        quizOptions.forEach(option => {
+            option.disabled = true;
+            option.classList.add('disabled');
+        });
     }
 
     adjustTimerPosition();
@@ -107,12 +113,18 @@ function loadQuestion(index) {
 
         //resetovanje timera
         setTime = question.seconds * 1000;
+        //setTime = sec * 1000;
         startTime = Date.now();
         futureTime = startTime + setTime;
-
         if (timerLoop) {
             clearInterval(timerLoop);
         }
+        semicircles[0].style.display = 'block';
+        semicircles[1].style.display = 'block';
+        semicircles[2].style.display = 'none';
+
+        semicircles[0].style.transform = 'rotate(0deg)';
+        semicircles[1].style.transform = 'rotate(0deg)';
         timerLoop = setInterval(countDownTimer);
         countDownTimer();
     } else {
