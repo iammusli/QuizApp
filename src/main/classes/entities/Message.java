@@ -2,6 +2,21 @@ package entities;
 
 import com.google.gson.Gson;
 
+enum MessageType {
+    JOIN_ROOM,
+    LEAVE_ROOM,
+    ERROR,
+    SKIP_QUESTION,
+    SWITCH_QUESTION,
+    END_QUIZ,
+    START_QUIZ,
+    ADMIN_ACTION_FEEDBACK,
+    ANSWER_SUBMISSION,
+    ANSWER_FEEDBACK,
+    QUESTION_BROADCAST,
+    QUIZ_RESULTS
+}
+
 public class Message {
     private String content;
     private String type;
