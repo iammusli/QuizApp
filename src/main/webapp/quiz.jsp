@@ -61,6 +61,15 @@
                     <p>Question <span id="current-question-number">1</span> of <%= quizDTO.getQuestions().size() %></p>
                 </div>
             </div>
+            <div id="results-popup" class="popup-overlay" style="display: none;">
+                <div class="popup-content">
+                    <h2>Rezultati</h2>
+                    <p id="correct-answers-popup"></p>
+                    <p id="incorrect-answers-popup"></p>
+                    <p id="score-popup"></p>
+                    <button onclick="goBack()">Go back</button>
+                </div>
+            </div>
 
         </div>
     </div>
