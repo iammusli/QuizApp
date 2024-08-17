@@ -21,7 +21,7 @@
                     <div class="quiz-buttons">
                         <button id="create-question-btn" class="button">Create question</button>
                         <button id="create-quiz-btn" class="button">Create quiz</button>
-
+                        <button id="cancel-btn" class="button">Cancel</button>
                     </div>
                 </div>
             </div>

@@ -81,7 +81,7 @@
     overflow-y: scroll;
     max-height: calc(100svh - 100px);
 
-    transition: all 0.5s ease;
+    transition: all 0.2s ease;
 }
 
 .question-wrapper {
@@ -178,6 +178,11 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+}
+
+.dragging {
+    opacity: 0.5;
+    background-color: #e74c3c;
 }
 
 .arrow ion-icon {
