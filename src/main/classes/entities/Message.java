@@ -14,7 +14,8 @@ enum MessageType {
     ANSWER_SUBMISSION,
     ANSWER_FEEDBACK,
     QUESTION_BROADCAST,
-    QUIZ_RESULTS
+    QUIZ_RESULTS,
+    CHAT_MESSAGE
 }
 
 public class Message {
