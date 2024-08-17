@@ -9,10 +9,8 @@ public class QuizSessionsController {
         this.activeSessions = new ConcurrentHashMap<String, QuizRoom>();
     }
 
-    public QuizRoom createSession(String quizPIN, String adminID){
-        QuizRoom newRoom = new QuizRoom(quizPIN, adminID);
-        activeSessions.put(quizPIN, newRoom);
-        return newRoom;
+    public void addSession(QuizRoom session){
+        activeSessions.put(session.getQuizPIN(), session);
     }
 
     public QuizRoom getSession(String quizPIN){

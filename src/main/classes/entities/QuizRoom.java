@@ -1,18 +1,36 @@
 package entities;
+import dao.QuizDAO;
+import services.QuizService;
+
 import javax.websocket.Session;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 
 public class QuizRoom {
     private String quizPIN;
-    private String adminID;
+    private Quiz quiz;
     private List<Session> clientSessions;
+    private Map<String, String> playerAnswers;
+    private ScheduledExecutorService scheduler;
+    private ScheduledFuture<?> questionTimer;
+    private Iterator<Question> questionIterator;
+    private Question currentQuestion;
+    private int questionTimeLimit = 30;
 
-    public QuizRoom(String quizPIN, String adminID){
+    public QuizRoom(String quizPIN, int quizID){
         this.quizPIN = quizPIN;
-        this.adminID = adminID;
+        this.quiz = new QuizService(new QuizDAO()).getQuizById(quizID);
         this.clientSessions = new ArrayList<Session>();
+        this.playerAnswers = new ConcurrentHashMap<>();
+        this.scheduler = Executors.newScheduledThreadPool(1);
+        this.questionIterator = quiz.getQuestions().iterator();
     }
     public String getQuizPIN() {
         return quizPIN;
@@ -35,16 +53,7 @@ public class QuizRoom {
             }
         }
     }
-    public boolean isAdmin(Session session){
-        return adminID.equals(session.getId());
-    }
-    public void handleMessage(Session sender, Message message){
-        if(isAdmin(sender) || !message.isAdminAction()){
-            broadcastMessage(message);
-        } else {
-            sendError(sender, "Unauthorized action attempt!");
-        }
-    }
+
     private void sendError(Session sender, String message){
         try{
             sender.getBasicRemote().sendText(new Message(message, "ERROR", "SERVER", quizPIN, false).toJson());
