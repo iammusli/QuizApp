@@ -1,6 +1,6 @@
-const quizPin = prompt("Enter Quiz Pin:");
-const quizID = prompt("Enter Quiz ID:");
-const playerId = prompt("Enter your Player ID:");
+const quizPin = document.getElementById('quiz-pin').value;
+const quizID = document.getElementById('quiz-id').value;
+//playerID
 
 const socket = new WebSocket(`ws://localhost:8080/quiz/${quizPin}/${quizID}`);
 
@@ -83,6 +83,24 @@ function countDownTimer() {
     adjustTimerPosition();
 }
 adjustTimerPosition();
+
+document.addEventListener('DOMContentLoaded', () => {
+    const playerID = '<%= request.getAttribute("playerID") != null ? request.getAttribute("playerID") : "" %>';
+
+    let finalPlayerID;
+
+    if (!playerID) {
+        finalPlayerID = prompt("Please enter your username:");
+    } else {
+        finalPlayerID = playerID;
+    }
+
+    const quizPin = document.getElementById('quiz-pin').value;
+    const quizID = document.getElementById('quiz-id').value;
+
+    const socket = new WebSocket(`ws://localhost:8080/quiz/${quizPin}/${quizID}/${finalPlayerID}`);
+
+});
 
 
 // WebSocket event listeners
