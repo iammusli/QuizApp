@@ -3,8 +3,12 @@ package dao;
 import entities.ActivePlaySession;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
 public class SessionDAO extends AbstractDAO {
+    private static final int MAX_PIN = 9999;
+    private static final int MIN_PIN = 0;
+
     public SessionDAO() {}
 
     public void save(ActivePlaySession session){
@@ -63,5 +67,37 @@ public class SessionDAO extends AbstractDAO {
                 em.close();
             }
         }
+    }
+
+    public int generateUniqueQuizPIN() {
+        EntityManager em = createEntityManager();
+        try {
+            em.getTransaction().begin();
+
+            // Find the highest quizPIN currently used
+            TypedQuery<Integer> query = (TypedQuery<Integer>) em.createQuery("SELECT MAX(s.quizPIN) FROM ActivePlaySession s");
+            Integer maxPin = query.getSingleResult();
+
+            // Generate new PIN
+            int newPin = (maxPin == null) ? MIN_PIN : (maxPin + 1) % (MAX_PIN + 1);
+
+            // Handle wrap-around
+            if (newPin > MAX_PIN) {
+                newPin = MIN_PIN;
+            }
+
+            em.getTransaction().commit();
+            return newPin;
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return MIN_PIN; // Default or error value
     }
 }
