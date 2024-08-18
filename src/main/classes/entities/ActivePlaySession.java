@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 @Table (name = "sessions")
 public class ActivePlaySession {
     @Id
-    @GeneratedValue (strategy = GenerationType.AUTO)
     private int quizPIN;
     @Column ( name = "quizID")
     private int quizID;
