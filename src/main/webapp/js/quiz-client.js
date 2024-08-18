@@ -107,9 +107,14 @@ socket.onerror = function(event) {
 function handleServerMessage(message) {
     switch (message.type) {
         case 'QUESTION_BROADCAST':
-            displayQuestion(message.content);
+            displayQuestion(message);
+            break;
+        case 'END_QUIZ':
+            displayResults();
             break;
         case 'CHAT_MESSAGE':
+            displayMessage(message.content);
+            break;
         case 'ERROR':
             displayMessage(message.content);
             break;
@@ -119,34 +124,42 @@ function handleServerMessage(message) {
 }
 
 // Display the current question and options
-function displayQuestion(questionText) {
-    messageElem.textContent = '';
+function displayQuestion(message) {
+   //loadQuestion(question) - proslijedi se question umjesto message
+
+    const { content: questionText, options } = message;
+    const questionElem = document.getElementById('question-text');
+    const optionsElem = document.getElementById('quiz-options');
+    const submitBtn = document.getElementById('submit-btn');
+
     questionElem.textContent = questionText;
-
-    // Assuming currentQuestion is an object with options like:
-    // { content: "Question?", options: ["A", "B", "C", "D"] }
-    currentQuestion = {
-        content: questionText,
-        options: ['Option 1', 'Option 2', 'Option 3', 'Option 4'] // Example options
-    };
-
     optionsElem.innerHTML = '';
-    currentQuestion.options.forEach((option, index) => {
-        const li = document.createElement('li');
-        li.textContent = option;
-        li.addEventListener('click', () => selectAnswer(option));
-        optionsElem.appendChild(li);
+
+    options.forEach(option => {
+        const button = document.createElement('button');
+        button.className = 'quiz-option';
+        button.textContent = option;
+        button.addEventListener('click', () => selectAnswer(option));
+        optionsElem.appendChild(button);
     });
 
     submitBtn.disabled = true;
+
+    resetTimer();
+    startTimer();
 }
+
 
 // Handle answer selection
 function selectAnswer(answer) {
     selectedAnswer = answer;
-    submitBtn.disabled = false;
+    document.getElementById('submit-btn').disabled = false;
 }
-
+document.getElementById('submit-btn').addEventListener('click', function() {
+    if (selectedAnswer) {
+        sendAnswer(selectedAnswer);
+    }
+});
 // Handle answer submission
 submitBtn.addEventListener('click', function() {
     if (selectedAnswer && currentQuestion) {
@@ -159,15 +172,42 @@ function sendAnswer(answer) {
     const answerMessage = {
         type: 'ANSWER_SUBMISSION',
         content: answer,
-        senderId: playerId,
-        quizPin: quizPin
+        senderID: playerId,
+        quizPIN: quizPin,
+        adminAction: false
     };
     socket.send(JSON.stringify(answerMessage));
-    submitBtn.disabled = true;
+    document.getElementById('submit-btn').disabled = true;
     displayMessage('Answer submitted.');
 }
 
 // Display a message to the user
 function displayMessage(message) {
     messageElem.textContent = message;
+}
+function resetTimer() {
+    setTime = sec * 1000;
+    //setTime = question.seconds * 1000;
+
+    startTime = Date.now();
+    futureTime = startTime + setTime;
+    if (timerLoop) {
+        clearInterval(timerLoop);
+    }
+    semicircles[0].style.display = 'block';
+    semicircles[1].style.display = 'block';
+    semicircles[2].style.display = 'none';
+    semicircles[0].style.transform = 'rotate(0deg)';
+    semicircles[1].style.transform = 'rotate(0deg)';
+    timerLoop = setInterval(countDownTimer);
+    countDownTimer();
+}
+function startTimer() {
+    semicircles[0].style.display = 'block';
+    semicircles[1].style.display = 'block';
+    semicircles[2].style.display = 'none';
+    semicircles[0].style.transform = 'rotate(0deg)';
+    semicircles[1].style.transform = 'rotate(0deg)';
+    timerLoop = setInterval(countDownTimer);
+    countDownTimer();
 }

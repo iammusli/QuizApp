@@ -25,6 +25,59 @@ let futureTime = startTime + setTime;
 let timerLoop = setInterval(countDownTimer);
 countDownTimer();
 
+function broadcastQuestion(question) {
+    const message = {
+        type: 'QUESTION_BROADCAST',
+        content: question.question,
+        options: question.answers.map(answer => answer.answer_text)
+    };
+    socket.send(JSON.stringify(message));
+}
+
+function handleWebSocketMessages() {
+    const socket = new WebSocket(`ws://localhost:8080/quiz/${quizPin}/${quizID}`);
+
+    socket.onopen = function() {
+        console.log("WebSocket connection opened.");
+    };
+
+    socket.onmessage = function(event) {
+        const message = JSON.parse(event.data);
+
+        switch (message.type) {
+            case 'ANSWER_SUBMISSION':
+                handleAnswerSubmission(message);
+                break;
+            case 'SKIP_QUESTION':
+                handleSkipQuestion();
+                break;
+            case 'END_QUIZ':
+                handleEndQuiz();
+                break;
+        }
+    };
+
+    socket.onclose = function() {
+        console.log("WebSocket connection closed.");
+    };
+
+    socket.onerror = function(error) {
+        console.error("WebSocket error:", error);
+    };
+}
+
+function handleAnswerSubmission(message) {
+    console.log(`Received answer from ${message.senderID}: ${message.content}`);
+    // Process the answer as needed
+}
+function handleSkipQuestion() {
+    console.log("Question skipped.");
+    loadNextQuestion();
+}
+function handleEndQuiz() {
+    console.log("Quiz ended.");
+    // Handle end-of-quiz operations
+}
 // Centriranje timera (NE CACKATI!)
 function adjustTimerPosition() {
     const quizQuestionRect = quizQuestion.getBoundingClientRect();
@@ -34,6 +87,7 @@ function adjustTimerPosition() {
 
     quizTimer.style.top = `${quizQuestionCenter - quizCardRect.top - (quizTimer.offsetHeight / 2)}px`;
 }
+handleWebSocketMessages();
 //za timer
 function countDownTimer() {
     const currentTime = Date.now();
