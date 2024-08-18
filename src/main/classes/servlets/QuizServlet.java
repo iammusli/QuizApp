@@ -31,6 +31,13 @@ public class QuizServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userRole = (String) request.getSession().getAttribute("role");
+
+        if (userRole == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
         String quizID = request.getParameter("quizID");
         if (quizID != null) {
             try {
@@ -63,7 +70,12 @@ public class QuizServlet extends HttpServlet {
                 quizDTO.setQuestions(questionDTOs);
 
                 request.setAttribute("quiz", quizDTO);
-                request.getRequestDispatcher("/quiz.jsp").forward(request, response);
+                if ("admin".equals(userRole)) {
+                    request.getRequestDispatcher("/quiz.jsp").forward(request, response);
+                }
+                else{
+                    request.getRequestDispatcher("/quiz-client.html").forward(request, response);
+                }
 
             } catch (NumberFormatException e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid quiz ID");

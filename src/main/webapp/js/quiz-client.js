@@ -126,7 +126,7 @@ function handleServerMessage(message) {
 // Display the current question and options
 function displayQuestion(message) {
    //loadQuestion(question) - proslijedi se question umjesto message
-
+    console.log('Displaying question:', message);
     const { content: questionText, options } = message;
     const questionElem = document.getElementById('question-text');
     const optionsElem = document.getElementById('quiz-options');

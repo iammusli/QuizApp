@@ -9,7 +9,7 @@ let totalCorrectAnswers = 0;
 let totalIncorrectAnswers = 0;
 let totalScore = 0;
 
-
+let socket;
 const hr = 0;
 const min = 0;
 const sec = 10;
@@ -50,6 +50,9 @@ function handleWebSocketMessages() {
                 break;
             case 'SKIP_QUESTION':
                 handleSkipQuestion();
+                break;
+            case 'QUESTION_BROADCAST':
+                displayQuestion(message);
                 break;
             case 'END_QUIZ':
                 handleEndQuiz();
