@@ -8,6 +8,7 @@
     <class>entities.Quiz</class>
     <class>entities.Question</class>
     <class>entities.Answer</class>
+    <class>entities.ActivePlaySession</class>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
       <property name="hibernate.hbm2ddl.auto" value="update"/>
