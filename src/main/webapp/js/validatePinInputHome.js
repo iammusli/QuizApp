@@ -49,7 +49,6 @@ $(document).ready(function() {
                 });
 
                 submitBtn.addEventListener("click", function() {
-                    var form = new FormData();
                     var pin_str = "";
                     var ready = true;
                     for (let i = 0; i < inputs.length; ++i) {
@@ -61,9 +60,23 @@ $(document).ready(function() {
                         inputs.forEach((input) => {
                             pin_str += input.value;
                         });
-                        form.set("pin", pin_str);
+
 
                         console.log(pin_str);
+
+                        var xhr = new XMLHttpRequest();
+                        xhr.onreadystatechange = function () {
+                            if(this.status === 200 && this.readyState === 4) {
+                                console.log("all good");
+                                window.location.href = "/rwa/play?quizPIN=" + pin_str;
+                            }
+                        }
+                        xhr.onerror = function() {
+                            console.log("ERROR");
+                        }
+                        xhr.open("POST", "/rwa/play?quizPIN=" + pin_str, true);
+                        xhr.setRequestHeader("Accept", "application/json");
+                        xhr.send();
                     }
                 });
             },

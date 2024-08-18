@@ -40,6 +40,7 @@ public class QuizServlet extends HttpServlet {
             System.out.println("JA SAM ADMIN");
             int sessionPIN = sessionService.generateQuizPIN();
             User user = (User) request.getSession().getAttribute("user");
+
             String quizID = request.getParameter("quizID");
             ActivePlaySession acp = new ActivePlaySession(Integer.parseInt(quizID), user.getId(), sessionPIN);
             sessionService.saveActivePlaySession(acp);
@@ -48,6 +49,11 @@ public class QuizServlet extends HttpServlet {
             try {
                 int id = Integer.parseInt(quizID);
                 Quiz quiz = quizService.getQuizById(id);
+
+                if(!user.isAdmin() || quiz.getOwner().getId() != user.getId()){
+                    return;
+                }
+
                 List<Question> questions = quizService.getQuestionsByQuizId(id);
 
                 QuizDTO quizDTO = new QuizDTO();
@@ -88,6 +94,9 @@ public class QuizServlet extends HttpServlet {
             if (acp != null) {
                 request.setAttribute("quizID", acp.getQuizID());
                 request.setAttribute("quizPIN", acp.getQuizPIN());
+                if(request.getSession(false) != null){
+                    request.setAttribute("playerID", ((User)request.getSession().getAttribute("user")).getUsername());
+                }
                 request.getRequestDispatcher("/quiz-client.html").forward(request, response);
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
