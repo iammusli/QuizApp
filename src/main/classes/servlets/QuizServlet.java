@@ -50,7 +50,7 @@ public class QuizServlet extends HttpServlet {
                 int id = Integer.parseInt(quizID);
                 Quiz quiz = quizService.getQuizById(id);
 
-                if(!user.isAdmin() || quiz.getOwner().getId() != user.getId()){
+                if(!user.isAdmin() && (quiz.getOwner().getId() != user.getId())){
                     return;
                 }
 
