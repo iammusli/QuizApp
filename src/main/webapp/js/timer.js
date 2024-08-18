@@ -9,7 +9,7 @@ let totalCorrectAnswers = 0;
 let totalIncorrectAnswers = 0;
 let totalScore = 0;
 
-let socket;
+
 const hr = 0;
 const min = 0;
 const sec = 10;
@@ -25,62 +25,6 @@ let futureTime = startTime + setTime;
 let timerLoop = setInterval(countDownTimer);
 countDownTimer();
 
-function broadcastQuestion(question) {
-    const message = {
-        type: 'QUESTION_BROADCAST',
-        content: question.question,
-        options: question.answers.map(answer => answer.answer_text)
-    };
-    socket.send(JSON.stringify(message));
-}
-
-function handleWebSocketMessages() {
-    const socket = new WebSocket(`ws://localhost:8080/quiz/${quizPin}/${quizID}`);
-
-    socket.onopen = function() {
-        console.log("WebSocket connection opened.");
-    };
-
-    socket.onmessage = function(event) {
-        const message = JSON.parse(event.data);
-
-        switch (message.type) {
-            case 'ANSWER_SUBMISSION':
-                handleAnswerSubmission(message);
-                break;
-            case 'SKIP_QUESTION':
-                handleSkipQuestion();
-                break;
-            case 'QUESTION_BROADCAST':
-                displayQuestion(message);
-                break;
-            case 'END_QUIZ':
-                handleEndQuiz();
-                break;
-        }
-    };
-
-    socket.onclose = function() {
-        console.log("WebSocket connection closed.");
-    };
-
-    socket.onerror = function(error) {
-        console.error("WebSocket error:", error);
-    };
-}
-
-function handleAnswerSubmission(message) {
-    console.log(`Received answer from ${message.senderID}: ${message.content}`);
-    // Process the answer as needed
-}
-function handleSkipQuestion() {
-    console.log("Question skipped.");
-    loadNextQuestion();
-}
-function handleEndQuiz() {
-    console.log("Quiz ended.");
-    // Handle end-of-quiz operations
-}
 // Centriranje timera (NE CACKATI!)
 function adjustTimerPosition() {
     const quizQuestionRect = quizQuestion.getBoundingClientRect();
@@ -90,7 +34,6 @@ function adjustTimerPosition() {
 
     quizTimer.style.top = `${quizQuestionCenter - quizCardRect.top - (quizTimer.offsetHeight / 2)}px`;
 }
-handleWebSocketMessages();
 //za timer
 function countDownTimer() {
     const currentTime = Date.now();
@@ -119,10 +62,11 @@ function countDownTimer() {
         semicircles[2].style.display = 'none';
 
         timer.innerHTML = `
-        <div>00</div>
-        <div class="colon">:</div>
-        <div>00</div>
-        `;
+    <div>00</div>
+    <div class="colon">:</div>
+    <div>00</div>
+`;
+
         const quizOptions = document.querySelectorAll('.quiz-option');
         quizOptions.forEach(option => {
             option.disabled = true;
@@ -136,7 +80,6 @@ function countDownTimer() {
 adjustTimerPosition();
 
 function loadQuestion(index) {
-    console.log(`Loading question ${index}`);
 
     if (index < questions.length) {
         const question = questions[index];
@@ -158,7 +101,7 @@ function loadQuestion(index) {
             button.textContent = answer.answer_text;
             quizOptionsContainer.appendChild(button);
         });
-        broadcastQuestion(question);
+
         const newQuizOptions = document.querySelectorAll('.quiz-option');
         newQuizOptions.forEach(option => {
             option.addEventListener('click', handleOptionClick);
@@ -186,14 +129,6 @@ function loadQuestion(index) {
 }
 
 function loadNextQuestion() {
-    const skipMessage = {
-        type: 'SKIP_QUESTION',
-        content: 'Admin has skipped the question.',
-        senderID: 'admin',
-        quizPIN: quizPin
-    };
-    socket.send(JSON.stringify(skipMessage));
-
     checkAnswers();
     currentQuestionIndex++;
     if (currentQuestionIndex === questions.length) {
