@@ -155,7 +155,7 @@ function loadQuestion(index) {
             button.textContent = answer.answer_text;
             quizOptionsContainer.appendChild(button);
         });
-
+        broadcastQuestion(question);
         const newQuizOptions = document.querySelectorAll('.quiz-option');
         newQuizOptions.forEach(option => {
             option.addEventListener('click', handleOptionClick);
@@ -183,6 +183,14 @@ function loadQuestion(index) {
 }
 
 function loadNextQuestion() {
+    const skipMessage = {
+        type: 'SKIP_QUESTION',
+        content: 'Admin has skipped the question.',
+        senderID: 'admin',
+        quizPIN: quizPin
+    };
+    socket.send(JSON.stringify(skipMessage));
+
     checkAnswers();
     currentQuestionIndex++;
     if (currentQuestionIndex === questions.length) {
