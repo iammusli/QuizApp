@@ -45,6 +45,8 @@ public class QuizWebSocket {
                 }
                 break;
             case QUESTION_BROADCAST:
+                quizRoom.broadcastMessage(message);
+                break;
             case CHAT_MESSAGE:
                 quizRoom.broadcastMessage(message);
                 break;
