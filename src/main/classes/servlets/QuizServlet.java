@@ -1,14 +1,14 @@
 package servlets;
 
-import entities.Answer;
-import entities.Question;
-import entities.Quiz;
+import dao.SessionDAO;
+import entities.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import services.QuizService;
+import services.SessionService;
 import utils.AnswerDTO;
 import utils.QuestionDTO;
 import utils.QuizDTO;
@@ -22,24 +22,32 @@ import java.util.List;
 public class QuizServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private QuizService quizService;
+    private SessionService sessionService;
 
     @Override
     public void init() throws ServletException {
         super.init();
         quizService = new QuizService(new QuizDAO());
+        sessionService = new SessionService();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String userRole = (String) request.getSession().getAttribute("role");
 
-        if (userRole == null) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
+        String uri = request.getQueryString();
+        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+        System.out.println(uri);
+        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 
-        String quizID = request.getParameter("quizID");
-        if (quizID != null) {
+        if(uri.startsWith("quizID=")){
+            System.out.println("JA SAM ADMIN");
+            int sessionPIN = sessionService.generateQuizPIN();
+            User user = (User) request.getSession().getAttribute("user");
+            String quizID = request.getParameter("quizID");
+            ActivePlaySession acp = new ActivePlaySession(Integer.parseInt(quizID), user.getId(), sessionPIN);
+            sessionService.saveActivePlaySession(acp);
+            request.setAttribute("room", acp);
+
             try {
                 int id = Integer.parseInt(quizID);
                 Quiz quiz = quizService.getQuizById(id);
@@ -70,18 +78,23 @@ public class QuizServlet extends HttpServlet {
                 quizDTO.setQuestions(questionDTOs);
 
                 request.setAttribute("quiz", quizDTO);
-                if ("admin".equals(userRole)) {
-                    request.getRequestDispatcher("/quiz.jsp").forward(request, response);
-                }
-                else{
-                    request.getRequestDispatcher("/quiz-client.html").forward(request, response);
-                }
+                request.getRequestDispatcher("/quiz.jsp").forward(request, response);
 
             } catch (NumberFormatException e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid quiz ID");
             }
-        } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing quiz ID");
+
+        } else if(uri.startsWith("quizPIN=")) {
+            System.out.println("JA SAM IGRAC");
+            String quizPIN = request.getParameter("quizPIN");
+            ActivePlaySession acp = sessionService.getActivePlaySessionByPIN(Integer.parseInt(quizPIN));
+            if (acp != null) {
+                request.setAttribute("quizID", acp.getQuizID());
+                request.setAttribute("quizPIN", acp.getQuizPIN());
+                request.getRequestDispatcher("/quiz-client.html").forward(request, response);
+            } else {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            }
         }
     }
 

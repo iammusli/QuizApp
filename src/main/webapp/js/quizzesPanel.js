@@ -82,7 +82,7 @@ function makeQuizCard(quizData) {
 
     buttonPlay.addEventListener("click", function(){
        console.log("Play quiz");
-        window.location.href = "/rwa/play?quizID=" + quizData.id;
+       // window.location.href = "/rwa/play?quizID=" + quizData.id;
     });
     buttonEdit.addEventListener("click", function(){
         console.log("Edit quiz");

@@ -56,7 +56,6 @@ inputs.forEach((input, key) => {
 
 
 function submitPin() {
-    var form = new FormData();
     var pin_str = "";
     var ready = true;
     for(let i = 0; i < inputs.length; ++i){
@@ -68,18 +67,22 @@ function submitPin() {
         inputs.forEach((input) => {
             pin_str += input.value;
         })
-        form.set("pin", pin_str);
 
         console.log(pin_str);
-        /*
+
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
             if(this.status === 200 && this.readyState === 4) {
                 console.log("all good");
+                window.location.href = "/rwa/play?quizPIN=" + pin_str;
             }
         }
-        xhr.open("GET", "NEKIURL", true);
-        xhr.send(); */
+        xhr.onerror = function() {
+            console.log("ERROR");
+        }
+        xhr.open("POST", "/rwa/play?quizPIN=" + pin_str, true);
+        xhr.setRequestHeader("Accept", "application/json");
+        xhr.send();
     }
 }
 

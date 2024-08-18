@@ -19,4 +19,7 @@ public class SessionService {
     public void saveActivePlaySession(ActivePlaySession activePlaySession) {
         sessionDAO.save(activePlaySession);
     }
+    public int generateQuizPIN() {
+        return sessionDAO.generateUniqueQuizPIN();
+    }
 }
