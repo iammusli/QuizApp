@@ -2,7 +2,7 @@ const quizPin = document.getElementById('quiz-pin').value;
 const quizID = document.getElementById('quiz-id').value;
 //playerID
 
-const socket = new WebSocket(`ws://localhost:8080/quiz/${quizPin}/${quizID}`);
+let playerID;
 
 const questionElem = document.getElementById('question');
 const optionsElem = document.getElementById('options');
@@ -85,41 +85,41 @@ function countDownTimer() {
 adjustTimerPosition();
 
 document.addEventListener('DOMContentLoaded', () => {
-    const playerID = '<%= request.getAttribute("playerID") != null ? request.getAttribute("playerID") : "" %>';
-
-    let finalPlayerID;
+    playerID = '<%= request.getAttribute("playerID") != null ? request.getAttribute("playerID") : "" %>';
 
     if (!playerID) {
-        finalPlayerID = prompt("Please enter your username:");
-    } else {
-        finalPlayerID = playerID;
+        playerID = prompt("Please enter your username:");
+        if (!playerID) {
+            alert("Username is required to join the quiz.");
+            return;
+        }
     }
 
     const quizPin = document.getElementById('quiz-pin').value;
     const quizID = document.getElementById('quiz-id').value;
 
-    const socket = new WebSocket(`ws://localhost:8080/quiz/${quizPin}/${quizID}/${finalPlayerID}`);
+    const socket = new WebSocket(`ws://localhost:8080/quiz/${quizPin}/${quizID}`);
 
+    socket.onopen = function(event) {
+        console.log('Connected to quiz server.');
+        //saljemo playerID serveru nakon uspostavljanja veze
+        socket.send(JSON.stringify({ playerID: playerID }));
+    };
+
+    socket.onmessage = function(event) {
+        const message = JSON.parse(event.data);
+        handleServerMessage(message);
+    };
+
+    socket.onclose = function(event) {
+        console.log('Disconnected from quiz server.');
+    };
+
+    socket.onerror = function(event) {
+        console.error('WebSocket error:', event);
+    };
 });
 
-
-// WebSocket event listeners
-socket.onopen = function(event) {
-    console.log('Connected to quiz server.');
-};
-
-socket.onmessage = function(event) {
-    const message = JSON.parse(event.data);
-    handleServerMessage(message);
-};
-
-socket.onclose = function(event) {
-    console.log('Disconnected from quiz server.');
-};
-
-socket.onerror = function(event) {
-    console.error('WebSocket error:', event);
-};
 
 // Handle incoming messages from the server
 function handleServerMessage(message) {
@@ -190,7 +190,7 @@ function sendAnswer(answer) {
     const answerMessage = {
         type: 'ANSWER_SUBMISSION',
         content: answer,
-        senderID: playerId,
+        senderID: playerID,
         quizPIN: quizPin,
         adminAction: false
     };
