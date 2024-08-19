@@ -4,12 +4,14 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import com.google.gson.Gson;
+import services.SessionService;
 
 
 @ServerEndpoint("/quiz/{quizPin}/{quizID}")
 public class QuizWebSocket {
 
     private static final QuizSessionsController sessionController = QuizSessionsController.getInstance();
+    private final SessionService sessionService = new SessionService();
     private final Gson gson = new Gson();
 
     @OnOpen
@@ -53,8 +55,17 @@ public class QuizWebSocket {
 
     @OnClose
     public void onClose(Session session, @PathParam("quizPin") String quizPin) {
+
+        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&& CLOSING &&&&&&&&&&&&&&&&&&&&&&&&&&&");
+        System.out.println("Sesija: " + session.getId() + " Quiz pin: " + quizPin);
+        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+
+
         QuizRoom quizRoom = sessionController.getSession(quizPin);
         quizRoom.removeClientSession(session);
+        if(quizRoom.getClientSessions().isEmpty()){
+            sessionService.removeActivePlaySessionByPIN(Integer.parseInt(quizRoom.getQuizPIN()));
+        }
         Message leaveMessage = new Message("A player has left.", MessageType.LEAVE_ROOM.name(), session.getId(), quizPin, false);
         quizRoom.broadcastMessage(leaveMessage);
     }

@@ -50,7 +50,7 @@ public class QuizServlet extends HttpServlet {
                 sessionService.saveActivePlaySession(acp);
                 QuizSessionsController quizSessionsController = QuizSessionsController.getInstance();
                 quizSessionsController.addSession(new QuizRoom(Integer.toString(sessionPIN), Integer.parseInt(quizID)));
-                quizSessionsController.syncWithDB();
+                quizSessionsController.syncWithDB(); // TODO: fix this later
                 System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
                 System.out.println("AKTIVNIH SOBA: " + quizSessionsController.getActiveSessionsCount());
                 System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
@@ -104,7 +104,7 @@ public class QuizServlet extends HttpServlet {
             if (acp != null) {
                 request.setAttribute("quizID", acp.getQuizID());
                 request.setAttribute("quizPIN", acp.getQuizPIN());
-                if(request.getSession(false) != null){
+                if(request.getAttribute("user") != null){
                     request.setAttribute("playerID", ((User)request.getSession().getAttribute("user")).getUsername());
                 }
                 request.getRequestDispatcher("/quiz-client.html").forward(request, response);
