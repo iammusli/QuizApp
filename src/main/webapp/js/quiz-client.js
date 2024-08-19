@@ -83,6 +83,8 @@ function countDownTimer() {
 adjustTimerPosition();
 
 document.addEventListener('DOMContentLoaded', () => {
+    quizPin = document.getElementById('quiz-pin').value;
+    quizID = document.getElementById('quiz-id').value;
     playerID = '<%= request.getAttribute("playerID") != null ? request.getAttribute("playerID") : "" %>';
 
     if (!playerID) {
@@ -92,9 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;  // Zaustavlja izvršenje ako nije unesen username
         }
     }
-
-    quizPin = document.getElementById('quiz-pin').value;
-    quizID = document.getElementById('quiz-id').value;
 
     const socket = new WebSocket(`ws://localhost:8080/quiz/${quizPin}/${quizID}`);
 
