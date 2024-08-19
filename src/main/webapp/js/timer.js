@@ -24,7 +24,7 @@ let futureTime = startTime + setTime;
 let timerLoop = setInterval(countDownTimer);
 countDownTimer();
 
-const socket = new WebSocket(`ws://localhost:8080/quiz/${quizPin}/${quizID}`);
+const socket = new WebSocket(`ws://localhost:80/rwa/quiz/${quizPin}/${quizID}`);
 
 socket.onopen = function(event) {
     console.log('WebSocket connection established.');
