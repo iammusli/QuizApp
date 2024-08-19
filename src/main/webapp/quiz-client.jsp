@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,8 +12,8 @@
 <body>
 <div class="container">
     <div class="content">
-        <input type="hidden" id="quiz-id" value="<%= request.getAttribute('quizID') %>" />
-        <input type="hidden" id="quiz-pin" value="<%= request.getAttribute('quizPIN') %>" />
+        <input type="hidden" id="quiz-id" value='<%= request.getAttribute("quizID") %>' />
+        <input type="hidden" id="quiz-pin" value='<%= request.getAttribute("quizPIN") %>' />
         <div class="quiz-card" id="quiz-card">
             <div class="quiz-header">
                 <h1 id="quiz-title"></h1>

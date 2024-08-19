@@ -108,7 +108,7 @@ public class QuizServlet extends HttpServlet {
                     request.setAttribute("playerID", ((User)request.getSession().getAttribute("user")).getUsername());
                     System.out.println("Player username: " + ((User)request.getSession().getAttribute("user")).getUsername() );
                 }
-                request.getRequestDispatcher("/quiz-client.html").forward(request, response);
+                request.getRequestDispatcher("/quiz-client.jsp").forward(request, response);
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }

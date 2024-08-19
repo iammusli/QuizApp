@@ -83,8 +83,9 @@ function countDownTimer() {
 adjustTimerPosition();
 
 document.addEventListener('DOMContentLoaded', () => {
-    quizPin = document.getElementById('quiz-pin').value;
     quizID = document.getElementById('quiz-id').value;
+    quizPin = document.getElementById('quiz-pin').value;
+
     playerID = '<%= request.getAttribute("playerID") != null ? request.getAttribute("playerID") : "" %>';
 
     if (!playerID) {
