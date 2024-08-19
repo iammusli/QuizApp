@@ -9,7 +9,6 @@ let totalCorrectAnswers = 0;
 let totalIncorrectAnswers = 0;
 let totalScore = 0;
 
-
 const hr = 0;
 const min = 0;
 const sec = 10;
@@ -24,6 +23,63 @@ let futureTime = startTime + setTime;
 
 let timerLoop = setInterval(countDownTimer);
 countDownTimer();
+
+const socket = new WebSocket(`ws://localhost:8080/quiz/${quizPin}/${quizID}`);
+
+socket.onopen = function(event) {
+    console.log('WebSocket connection established.');
+};
+
+socket.onmessage = function(event) {
+    const message = JSON.parse(event.data);
+    handleMessage(message);
+};
+
+socket.onerror = function(error) {
+    console.error('WebSocket error:', error);
+};
+
+socket.onclose = function(event) {
+    console.log('WebSocket connection closed.');
+};
+
+function sendQuestion(question, options) {
+    const message = {
+        type: 'QUESTION_BROADCAST',
+        content: {
+            question: question,
+            options: options
+        }
+    };
+    socket.send(JSON.stringify(message));
+}
+
+function handleMessage(message) {
+    switch (message.type) {
+        case 'QUESTION_BROADCAST':
+            displayQuestion(message.content.question, message.content.options);
+            break;
+        case 'CHAT_MESSAGE':
+            //displayChatMessage(message.content);
+            break;
+        default:
+            console.log('Unknown message type:', message.type);
+            break;
+    }
+}
+
+function displayQuestion(question, options) {
+    //prikazivanje pitanja i opcija na korisničkom interfejsu
+    document.getElementById('question').textContent = question;
+    const optionsContainer = document.getElementById('options');
+    optionsContainer.innerHTML = ''; //ocisti prethodne opcije
+    options.forEach(option => {
+        const optionElement = document.createElement('div');
+        optionElement.textContent = option;
+        optionsContainer.appendChild(optionElement);
+    });
+}
+
 
 // Centriranje timera (NE CACKATI!)
 function adjustTimerPosition() {
