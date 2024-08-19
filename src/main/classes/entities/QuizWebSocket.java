@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 @ServerEndpoint("/quiz/{quizPin}/{quizID}")
 public class QuizWebSocket {
 
-    private static final QuizSessionsController sessionController = new QuizSessionsController();
+    private static final QuizSessionsController sessionController = QuizSessionsController.getInstance();
     private final Gson gson = new Gson();
 
     @OnOpen

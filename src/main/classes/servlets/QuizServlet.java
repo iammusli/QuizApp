@@ -42,11 +42,21 @@ public class QuizServlet extends HttpServlet {
             User user = (User) request.getSession().getAttribute("user");
 
             String quizID = request.getParameter("quizID");
-            ActivePlaySession acp = new ActivePlaySession(Integer.parseInt(quizID), user.getId(), sessionPIN);
-            sessionService.saveActivePlaySession(acp);
-            request.setAttribute("room", acp);
+
 
             try {
+
+                ActivePlaySession acp = new ActivePlaySession(Integer.parseInt(quizID), user.getId(), sessionPIN);
+                sessionService.saveActivePlaySession(acp);
+                QuizSessionsController quizSessionsController = QuizSessionsController.getInstance();
+                quizSessionsController.addSession(new QuizRoom(Integer.toString(sessionPIN), Integer.parseInt(quizID)));
+                quizSessionsController.syncWithDB();
+                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                System.out.println("AKTIVNIH SOBA: " + quizSessionsController.getActiveSessionsCount());
+                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+
+                request.setAttribute("room", acp);
+
                 int id = Integer.parseInt(quizID);
                 Quiz quiz = quizService.getQuizById(id);
 

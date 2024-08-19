@@ -3,6 +3,8 @@ package services;
 import dao.SessionDAO;
 import entities.ActivePlaySession;
 
+import java.util.List;
+
 public class SessionService {
     private SessionDAO sessionDAO;
 
@@ -21,5 +23,8 @@ public class SessionService {
     }
     public int generateQuizPIN() {
         return sessionDAO.generateUniqueQuizPIN();
+    }
+    public List<ActivePlaySession> getAllActivePlaySessions() {
+        return sessionDAO.getAllActivePlaySessions();
     }
 }

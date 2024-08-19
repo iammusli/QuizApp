@@ -5,6 +5,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SessionDAO extends AbstractDAO {
     private static final int MAX_PIN = 9999;
     private static final int MIN_PIN = 0;
@@ -37,6 +40,26 @@ public class SessionDAO extends AbstractDAO {
             ActivePlaySession session = (ActivePlaySession) q.getSingleResult();
             em.getTransaction().commit();
             return session;
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+
+    public List<ActivePlaySession> getAllActivePlaySessions(){
+        EntityManager em = createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query q = em.createQuery("SELECT s FROM ActivePlaySession s");
+            List<ActivePlaySession> sessions = (ArrayList<ActivePlaySession>) q.getResultList();
+            em.getTransaction().commit();
+            return sessions;
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
