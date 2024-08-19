@@ -1,7 +1,5 @@
-const quizPin = document.getElementById('quiz-pin').value;
-const quizID = document.getElementById('quiz-id').value;
-//playerID
-
+let quizPin;
+let quizID;
 let playerID;
 
 const questionElem = document.getElementById('question');
@@ -91,24 +89,27 @@ document.addEventListener('DOMContentLoaded', () => {
         playerID = prompt("Please enter your username:");
         if (!playerID) {
             alert("Username is required to join the quiz.");
-            return;
+            return;  // Zaustavlja izvršenje ako nije unesen username
         }
     }
 
-    const quizPin = document.getElementById('quiz-pin').value;
-    const quizID = document.getElementById('quiz-id').value;
+    quizPin = document.getElementById('quiz-pin').value;
+    quizID = document.getElementById('quiz-id').value;
 
     const socket = new WebSocket(`ws://localhost:8080/quiz/${quizPin}/${quizID}`);
 
     socket.onopen = function(event) {
         console.log('Connected to quiz server.');
-        //saljemo playerID serveru nakon uspostavljanja veze
         socket.send(JSON.stringify({ playerID: playerID }));
     };
 
     socket.onmessage = function(event) {
-        const message = JSON.parse(event.data);
-        handleServerMessage(message);
+        //const message = JSON.parse(event.data);//parsira pitanja i opcije
+        //handleServerMessage(message);
+        const data = JSON.parse(event.data);
+        if (data.type === 'QUESTION_BROADCAST') {
+            displayQuestion(data);
+        }
     };
 
     socket.onclose = function(event) {
@@ -120,12 +121,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 });
 
-
 // Handle incoming messages from the server
+/*
 function handleServerMessage(message) {
     switch (message.type) {
         case 'QUESTION_BROADCAST':
-            displayQuestion(message);
+            displayQuestion(message.content);//question data
             break;
         case 'END_QUIZ':
             displayResults();
@@ -140,69 +141,50 @@ function handleServerMessage(message) {
             console.warn('Unknown message type:', message.type);
     }
 }
+*/
+//ono sto je na onmessage pokupio kao datu od servera
+function displayQuestion(data) {
+    const questionElement = document.getElementById('question-text');
+    const optionsElement = document.getElementById('quiz-options');
 
-// Display the current question and options
-function displayQuestion(message) {
-   //loadQuestion(question) - proslijedi se question umjesto message
-    console.log('Displaying question:', message);
-    const { content: questionText, options } = message;
-    const questionElem = document.getElementById('question-text');
-    const optionsElem = document.getElementById('quiz-options');
-    const submitBtn = document.getElementById('submit-btn');
+    questionElement.innerText = data.question;//prikazi pitanje
 
-    questionElem.textContent = questionText;
-    optionsElem.innerHTML = '';
+    //opcije
+    optionsElement.innerHTML = '';//ocisti prethodne
 
-    options.forEach(option => {
+    data.options.forEach((option, index) => {
         const button = document.createElement('button');
-        button.className = 'quiz-option';
-        button.textContent = option;
-        button.addEventListener('click', () => selectAnswer(option));
-        optionsElem.appendChild(button);
+        button.innerText = option;
+        button.classList.add('option-button');
+
+        //dodavanje funkcionalnosti kada se klikne na opciju
+        button.onclick = () => selectOption(index);
+        optionsElement.appendChild(button);
     });
-
-    submitBtn.disabled = true;
-
     resetTimer();
     startTimer();
 }
 
-
 // Handle answer selection
-function selectAnswer(answer) {
-    selectedAnswer = answer;
-    document.getElementById('submit-btn').disabled = false;
-}
-document.getElementById('submit-btn').addEventListener('click', function() {
-    if (selectedAnswer) {
-        sendAnswer(selectedAnswer);
-    }
-});
-// Handle answer submission
-submitBtn.addEventListener('click', function() {
-    if (selectedAnswer && currentQuestion) {
-        sendAnswer(selectedAnswer);
-    }
-});
-
-// Send the selected answer to the server
-function sendAnswer(answer) {
-    const answerMessage = {
-        type: 'ANSWER_SUBMISSION',
-        content: answer,
-        senderID: playerID,
-        quizPIN: quizPin,
-        adminAction: false
+function selectOption(selectedIndex) {
+    const answer = {
+        //obj za slanje odabrane opcije
+        type: 'ANSWER',
+        selectedOption: selectedIndex
     };
-    socket.send(JSON.stringify(answerMessage));
-    document.getElementById('submit-btn').disabled = true;
-    displayMessage('Answer submitted.');
+    socket.send(JSON.stringify(answer));
+    console.log(`Selected option: ${selectedIndex}`);//prikaz za  korisnikz
+    disableOptions();
 }
 
-// Display a message to the user
-function displayMessage(message) {
-    messageElem.textContent = message;
+function disableOptions() {
+    const quizOptions = document.querySelectorAll('.option-button');
+    quizOptions.forEach(option => {
+        option.disabled = true;
+        option.classList.add('disabled');
+    });
 }
+
 function resetTimer() {
     setTime = sec * 1000;
     //setTime = question.seconds * 1000;
