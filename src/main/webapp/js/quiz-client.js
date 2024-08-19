@@ -94,8 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;  // Zaustavlja izvršenje ako nije unesen username
         }
     }
-
-    const socket = new WebSocket(`ws://localhost:8080/quiz/${quizPin}/${quizID}`);
+    const socket = new WebSocket('ws://localhost:8080/quiz/' + quizPin + '/' + quizID);
 
     socket.onopen = function(event) {
         console.log('Connected to quiz server.');
