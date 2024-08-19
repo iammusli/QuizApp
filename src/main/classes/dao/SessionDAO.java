@@ -10,7 +10,7 @@ import java.util.List;
 
 public class SessionDAO extends AbstractDAO {
     private static final int MAX_PIN = 9999;
-    private static final int MIN_PIN = 0;
+    private static final int MIN_PIN = 1000;
 
     public SessionDAO() {}
 

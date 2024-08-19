@@ -104,8 +104,9 @@ public class QuizServlet extends HttpServlet {
             if (acp != null) {
                 request.setAttribute("quizID", acp.getQuizID());
                 request.setAttribute("quizPIN", acp.getQuizPIN());
-                if(request.getAttribute("user") != null){
+                if(request.getSession().getAttribute("user") != null){
                     request.setAttribute("playerID", ((User)request.getSession().getAttribute("user")).getUsername());
+                    System.out.println("Player username: " + ((User)request.getSession().getAttribute("user")).getUsername() );
                 }
                 request.getRequestDispatcher("/quiz-client.html").forward(request, response);
             } else {
