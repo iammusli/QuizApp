@@ -14,14 +14,9 @@ public class QuizWebSocket {
 
     @OnOpen
     public void onOpen(Session session, @PathParam("quizPin") String quizPin, @PathParam("quizID") int quizID) {
-        QuizRoom quizRoom = sessionController.getSession(quizPin);
-        if (quizRoom == null) {
-            quizRoom = new QuizRoom(quizPin,quizID);
-            sessionController.addSession(quizRoom);
-        }
-        quizRoom.addClientSession(session);
+        sessionController.getSession(quizPin).addClientSession(session);
         Message joinMessage = new Message("A new player has joined.", MessageType.JOIN_ROOM.name(), session.getId(), quizPin, false);
-        quizRoom.broadcastMessage(joinMessage);
+        sessionController.getSession(quizPin).broadcastMessage(joinMessage);
     }
 
     @OnMessage
