@@ -1,8 +1,9 @@
 package entities;
 import dao.QuizDAO;
+import jakarta.websocket.Session;
 import services.QuizService;
 
-import javax.websocket.Session;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
