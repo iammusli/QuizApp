@@ -7,7 +7,19 @@ $(document).ready(function() {
             success: function(data) {
                 console.log("Received JSON:", data);
                 const userListHtml = data.map(user => `
-                    <div class="profile-user" data-id="${user.id}" data-username="${user.username}" data-password="${user.password}" data-rank="#${user.id}" data-games="100" data-points="500" data-completion="75%" data-correct="70%" data-incorrect="30%">${user.username}</div>
+                    <div class="profile-user" 
+                    data-id="${user.id}" 
+                    data-username="${user.username}" 
+                    data-password="${user.password}" 
+                    data-rank="#${user.id}" 
+                    data-games="100" 
+                    data-points="500" 
+                    data-completion="75%" 
+                    data-correct="70%" 
+                    data-incorrect="30%"
+                    data-isAdmin="${user.isAdmin}">
+            ${user.username}
+        </div>
                 `).join('');
 
                 $('.content').html(`
@@ -19,6 +31,7 @@ $(document).ready(function() {
                             <div class="profile-header" id="profile-header">
                                 <h1>Profile Info <span id="edit-icon" class="profile-edit-icon"><i class="fas fa-pencil-alt"></i></span></h1>
                                 <p id="profile-username">Username: </p>
+                                <p id="profile-admin">Admin: </p>
                             </div>
                             <div class="profile-stats">
                                 <div class="profile-stat">
@@ -56,7 +69,7 @@ $(document).ready(function() {
                             
                             <h2>Edit Password</h2>
                             <input type="password" id="new-password" class="profile-new-password" placeholder="Enter new password">
-<!--
+
                              <h2>Set User Role</h2>
                             <div class="profile-role-switch">
                                 <label class="profile-switch">
@@ -64,7 +77,7 @@ $(document).ready(function() {
                                     <span class="profile-slider round"></span>
                                 </label>
                             </div>
-                            -->
+                            
                             <button id="save-username" class="profile-save-username">Save</button>
                         </div>
                     </div>
@@ -79,7 +92,7 @@ $(document).ready(function() {
                 const newUsernameInput = document.getElementById('new-username');
                 const newPasswordInput = document.getElementById('new-password');
                 const roleSwitch = document.getElementById('role-switch');
-                //const roleDisplay = document.getElementById('role-display');
+                const roleDisplay = document.getElementById('role-display');
                 let currentUserId;
 
                 function updateProfileCard(user) {
@@ -92,11 +105,14 @@ $(document).ready(function() {
                     const completion = user.getAttribute('data-completion');
                     const correct = user.getAttribute('data-correct');
                     const incorrect = user.getAttribute('data-incorrect');
+                    const isAdmin = user.getAttribute('data-isAdmin') === 'true';
 
                     currentUserId = id;
 
                     profileHeader.querySelector('h1').innerHTML = `Profile Info <span id="edit-icon" class="profile-edit-icon"><i class="fas fa-pencil-alt"></i></span>`;
                     profileHeader.querySelector('#profile-username').textContent = `Username: ${username}`;
+                    profileHeader.querySelector('#profile-admin').textContent = `Admin: ${isAdmin ? 'True' : 'False'}`;
+
                     document.getElementById('profile-rank').textContent = rank;
                     document.getElementById('profile-games').textContent = games;
                     document.getElementById('profile-points').textContent = points;
@@ -110,6 +126,8 @@ $(document).ready(function() {
                         newUsernameInput.value = username;
                         newPasswordInput.value = "";
                        // roleSwitch.checked = roleDisplay.textContent === 'Admin';
+                        roleSwitch.checked = roleDisplay.textContent = isAdmin ? 'Admin' : 'User';
+
                     });
                 }
 
@@ -132,8 +150,7 @@ $(document).ready(function() {
                 saveUsernameButton.addEventListener('click', () => {
                     const newUsername = newUsernameInput.value;
                     const newPassword = newPasswordInput.value;
-                    //const role = roleSwitch.checked ? 'Admin' : 'Editor';
-                    //roleDisplay.textContent = role;
+                    const isAdmin = roleSwitch.checked;
 
                     $.ajax({
                         url: '/rwa/admin/profile',
@@ -142,7 +159,8 @@ $(document).ready(function() {
                         data: JSON.stringify({
                             id: currentUserId,
                             username: newUsername,
-                            password: newPassword
+                            password: newPassword,
+                            isAdmin: isAdmin
                         }),
                         success: function(data) {
                             alert("Profile updated successfully!");
@@ -157,11 +175,11 @@ $(document).ready(function() {
                     modal.style.display = 'none';
                 });
 
-                /*
+
                 roleSwitch.addEventListener('change', () => {
-                    roleDisplay.textContent = roleSwitch.checked ? 'Admin' : 'Editor';
+                    roleDisplay.textContent = roleSwitch.checked ? 'Admin' : 'User';
                 });
-*/
+
                 const firstUser = userList.querySelector('.profile-user');
                 if (firstUser) {
                     updateProfileCard(firstUser);

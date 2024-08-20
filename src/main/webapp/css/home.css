@@ -344,6 +344,9 @@ div .quiz-picture {
     padding: 20px 0;
     margin-top: 20px;
 }
+.profile-close {
+    cursor: pointer;
+}
 .stat-set-settings {
     background: #f7f7f7;
     border-radius: 10px;

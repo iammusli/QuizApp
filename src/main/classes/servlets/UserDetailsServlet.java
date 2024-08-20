@@ -18,6 +18,9 @@ import utils.QuestionSerializer;
 import utils.QuizSerializer;
 import utils.UserSerializer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
@@ -29,12 +32,19 @@ public class UserDetailsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("Entered UserDetailsServlet doGet");
 
-        User user = (User) req.getSession().getAttribute("user");
-        if (user != null) {
+        User currentUser = (User) req.getSession().getAttribute("user");
+        if (currentUser != null) {
             System.out.println("User is not null");
 
             UserDAO userDao = new UserDAO();
-            List<User> userList = userDao.findAllUsers();
+            List<User> userList;
+
+            if (currentUser.isAdmin()) {
+                userList = userDao.findAllUsers();
+            } else {
+                userList = new ArrayList<>();
+                userList.add(currentUser);
+            }
 
             for (User u : userList) {
                 String password = u.getPassword();
@@ -63,7 +73,6 @@ public class UserDetailsServlet extends HttpServlet {
         }
     }
 
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("Entered UserDetailsServlet doPost");
@@ -79,15 +88,19 @@ public class UserDetailsServlet extends HttpServlet {
             int userId = jsonObject.get("id").getAsInt();
             String newUsername = jsonObject.get("username").getAsString();
             String newPassword = jsonObject.get("password").getAsString();
+            boolean isAdmin = jsonObject.get("isAdmin").getAsBoolean();
 
             UserDAO userDao = new UserDAO();
             User updatedUser = userDao.findUserById(userId);
             if (updatedUser != null) {
                 updatedUser.setUsername(newUsername);
+                updatedUser.setAdmin(isAdmin);
+
                 if (!newPassword.isEmpty()) {
                     String hashedPassword = org.mindrot.jbcrypt.BCrypt.hashpw(newPassword, org.mindrot.jbcrypt.BCrypt.gensalt());
                     updatedUser.setPassword(hashedPassword);
                 }
+
                 userDao.updateUser(updatedUser);
                 System.out.println("Profile updated successfully");
 
@@ -104,4 +117,5 @@ public class UserDetailsServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
         }
     }
+
 }
