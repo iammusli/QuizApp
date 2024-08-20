@@ -23,12 +23,14 @@ public class QuizServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private QuizService quizService;
     private SessionService sessionService;
+    private QuizSessionsController quizSessionsController;
 
     @Override
     public void init() throws ServletException {
         super.init();
         quizService = new QuizService(new QuizDAO());
         sessionService = new SessionService();
+        quizSessionsController = QuizSessionsController.getInstance();
     }
 
     @Override
@@ -47,10 +49,9 @@ public class QuizServlet extends HttpServlet {
             try {
 
                 ActivePlaySession acp = new ActivePlaySession(Integer.parseInt(quizID), user.getId(), sessionPIN);
-                sessionService.saveActivePlaySession(acp);
-                QuizSessionsController quizSessionsController = QuizSessionsController.getInstance();
                 quizSessionsController.addSession(new QuizRoom(Integer.toString(sessionPIN), Integer.parseInt(quizID)));
                 quizSessionsController.syncWithDB(); // TODO: fix this later
+                sessionService.saveActivePlaySession(acp);
                 System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
                 System.out.println("AKTIVNIH SOBA: " + quizSessionsController.getActiveSessionsCount());
                 System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
@@ -60,38 +61,12 @@ public class QuizServlet extends HttpServlet {
                 int id = Integer.parseInt(quizID);
                 Quiz quiz = quizService.getQuizById(id);
 
-                if(!user.isAdmin() && (quiz.getOwner().getId() != user.getId())){
-                    return;
+                if(request.getSession().getAttribute("user") != null){
+                    request.getSession().setAttribute("playerID", ((User)request.getSession().getAttribute("user")).getUsername());
                 }
-
-                List<Question> questions = quizService.getQuestionsByQuizId(id);
-
-                QuizDTO quizDTO = new QuizDTO();
-                quizDTO.setTitle(quiz.getTitle());
-                quizDTO.setCategory(quiz.getCategory());
-
-                List<QuestionDTO> questionDTOs = new ArrayList<>();
-                for (Question question : questions) {
-                    QuestionDTO questionDTO = new QuestionDTO();
-                    questionDTO.setQuestion(question.getQuestion());
-                    questionDTO.setPoints(question.getPoints());
-                    questionDTO.setSeconds(question.getSeconds());
-
-                    List<AnswerDTO> answerDTOs = new ArrayList<>();
-                    List<Answer> answers = quizService.getAnswersByQuestionId(question.getId());
-                    for (Answer answer : answers) {
-                        AnswerDTO answerDTO = new AnswerDTO();
-                        answerDTO.setAnswer_text(answer.getAnswer_text());
-                        answerDTO.setCorrect(answer.isCorrect());
-                        answerDTOs.add(answerDTO);
-                    }
-                    questionDTO.setAnswers(answerDTOs);
-                    questionDTOs.add(questionDTO);
-                }
-                quizDTO.setQuestions(questionDTOs);
-
-                request.setAttribute("quiz", quizDTO);
-                request.getRequestDispatcher("/quiz.jsp").forward(request, response);
+                request.getSession().setAttribute("quizPIN", Integer.toString(sessionPIN));
+                request.getSession().setAttribute("quizID", quizID);
+                request.getRequestDispatcher("/admin.jsp").forward(request, response);
 
             } catch (NumberFormatException e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid quiz ID");
@@ -102,11 +77,12 @@ public class QuizServlet extends HttpServlet {
             String quizPIN = request.getParameter("quizPIN");
             ActivePlaySession acp = sessionService.getActivePlaySessionByPIN(Integer.parseInt(quizPIN));
             if (acp != null) {
+                QuizRoom session = quizSessionsController.getSession(quizPIN);
                 request.setAttribute("quizID", acp.getQuizID());
                 request.setAttribute("quizPIN", acp.getQuizPIN());
-                if(request.getSession().getAttribute("user") != null){
-                    request.setAttribute("playerID", ((User)request.getSession().getAttribute("user")).getUsername());
-                    System.out.println("Player username: " + ((User)request.getSession().getAttribute("user")).getUsername() );
+                if(request.getAttribute("user") != null){
+                    request.setAttribute("playerID", ((User)request.getAttribute("user")).getUsername());
+                    System.out.println("Player username: " + ((User)request.getAttribute("user")).getUsername() );
                 }
                 request.getRequestDispatcher("/quiz-client.jsp").forward(request, response);
             } else {

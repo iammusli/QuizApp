@@ -6,18 +6,15 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class QuizSessionsController {
-    // Step 1: Create a private static instance of the class
+
     private static QuizSessionsController instance = null;
 
-    // Step 2: Use a ConcurrentHashMap to store active sessions
     private ConcurrentHashMap<String, QuizRoom> activeSessions;
 
-    // Step 3: Make the constructor private to prevent instantiation
     private QuizSessionsController() {
         this.activeSessions = new ConcurrentHashMap<String, QuizRoom>();
     }
 
-    // Step 4: Provide a public static method to get the instance
     public static QuizSessionsController getInstance() {
         if (instance == null) {
             synchronized (QuizSessionsController.class) {

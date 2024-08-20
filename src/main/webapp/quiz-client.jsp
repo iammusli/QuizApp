@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div class="players-circle">
-                <i class="fas fa-users"></i> <span id="players">5</span>
+                <i class="fas fa-users"></i> <span id="players"></span>
             </div>
             <div class="quiz-options" id="quiz-options">
                 <!-- Options will be added dynamically here -->

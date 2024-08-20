@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 enum MessageType {
     JOIN_ROOM,
     LEAVE_ROOM,
+    PLAYER_COUNT,
+    ANSWERS_BROADCAST,
     ERROR,
     SKIP_QUESTION,
     SWITCH_QUESTION,

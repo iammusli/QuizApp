@@ -1,4 +1,5 @@
 package entities;
+import com.google.gson.Gson;
 import dao.QuizDAO;
 import jakarta.websocket.Session;
 import services.QuizService;
@@ -30,12 +31,14 @@ public class QuizRoom {
         this.playerAnswers = new ConcurrentHashMap<>();
         this.scheduler = Executors.newScheduledThreadPool(1);
         this.questionIterator = quiz.getQuestions().iterator();
+        this.currentQuestion = questionIterator.next();
     }
 
     public void startQuiz() {
         if (quiz != null) {
             quizStarted = true;
             broadcastMessage(new Message("The quiz has started!", MessageType.CHAT_MESSAGE.name(), "Server", quizPIN, true));
+            currentQuestion();
         } else {
             broadcastMessage(new Message("Quiz not found.", MessageType.ERROR.name(), "Server", quizPIN, true));
         }
@@ -44,10 +47,22 @@ public class QuizRoom {
     private void nextQuestion() {
         if (questionIterator.hasNext()) {
             currentQuestion = questionIterator.next();
-            broadcastMessage(new Message(currentQuestion.getQuestion(), MessageType.QUESTION_BROADCAST.name(), "Server", quizPIN, true));
+            currentQuestion();
             startQuestionTimer();
         } else {
             endQuiz();
+        }
+    }
+
+    public void currentQuestion(){
+        if(currentQuestion != null){
+            broadcastMessage(new Message(currentQuestion.getQuestion(), MessageType.QUESTION_BROADCAST.name(), "Server", quizPIN, false));
+            Gson gson = new Gson();
+            List<String> answers = new ArrayList<>();
+            for(int i = 0; i < 4; ++i){
+                answers.add(gson.toJson(currentQuestion.getAnswers().get(i).getAnswer_text()));
+            }
+            broadcastMessage(new Message(gson.toJson(answers), MessageType.ANSWERS_BROADCAST.name(), "Server", quizPIN, false));
         }
     }
 
@@ -117,5 +132,11 @@ public class QuizRoom {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean checkAnswer(int choice) {
+        if(currentQuestion.getAnswers().get(choice).isCorrect())
+            return true;
+        else return false;
     }
 }
