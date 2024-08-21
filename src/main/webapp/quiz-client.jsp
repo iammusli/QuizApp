@@ -35,9 +35,9 @@
             <div id="results-popup" class="popup-overlay" style="display: none;">
                 <div class="popup-content">
                     <h2>Results</h2>
-                    <p id="correct-answers-popup"></p>
-                    <p id="incorrect-answers-popup"></p>
-                    <p id="score-popup"></p>
+                    <ol id="list">
+
+                    </ol>
                 </div>
             </div>
         </div>

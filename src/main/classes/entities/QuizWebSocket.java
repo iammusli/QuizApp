@@ -79,7 +79,6 @@ public class QuizWebSocket {
                 break;
             case CHAT_MESSAGE:
                 quizRoom.broadcastMessage(message);
-                System.out.println("USO JE U CHAT MESSAGE CASE");
                 break;
             case JOIN_ROOM:
                 quizRoom.broadcastMessage(new Message(Integer.toString(quizRoom.getClientSessions().size()), MessageType.PLAYER_COUNT.name(), "SERVER", quizPin, false));

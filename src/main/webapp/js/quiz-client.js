@@ -13,6 +13,8 @@ let answer2 = null;
 let answer3 = null;
 let answer4 = null;
 let selectedAnswer;
+let score = 0;
+const list = document.getElementById("list");
 
 
 
@@ -113,11 +115,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(message.senderID === playerID){
                     console.log(playerID + " earned " + message.content + " points")
                 }
+                console.log(JSON.parse(message.content));
+                fillList(JSON.parse(message.content));
                 break;
             default:
                 console.log('Unknown message type:', message.type);
                 break;
         }
+    }
+
+    function fillList(data){
+        console.log(data);
+        let arr = [];
+        for (let key in data) {
+            arr.push({[key] : data[key]});
+        }
+        console.log(arr);
     }
 
     function displayAnswers(answers){

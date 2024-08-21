@@ -37,6 +37,16 @@ body {
     background: var(--clr);
 }
 
+#hello-text {
+    font-size: 2rem;
+    color: var(--white);
+}
+
+#hello {
+    font-size: 2rem;
+    color: var(--blue);
+}
+
 .nav-wrapper {
     position: relative;
     display: flex;

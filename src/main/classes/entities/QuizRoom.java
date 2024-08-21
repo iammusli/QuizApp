@@ -53,14 +53,16 @@ public class QuizRoom {
             startQuestionTimer();
         } else {
             sendResults();
-            endQuiz();
+            //endQuiz();
         }
     }
 
     private void sendResults() {
-        playerPoints.forEach((player, points) -> {
+       /* playerPoints.forEach((player, points) -> {
             broadcastMessage(new Message(Integer.toString(points), MessageType.QUIZ_RESULTS.name(), player, quizPIN, true));
-        });
+        }); */
+        Gson gson = new Gson();
+        broadcastMessage(new Message(gson.toJson(playerPoints), MessageType.QUIZ_RESULTS.name(), "Server", quizPIN, false));
     }
 
     public void currentQuestion(){

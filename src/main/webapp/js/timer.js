@@ -10,6 +10,7 @@ let answer3Text = "";
 let answer4Text = "";
 let buttonStart;
 let buttonSkip;
+let buttonEnd;
 const players = document.getElementById("player-count");
 let question = null;
 let answer1 = null;
@@ -138,6 +139,17 @@ document.addEventListener('DOMContentLoaded', () => {
         var msg = {
             content: "Skip question",
             type: "SKIP_QUESTION",
+            senderID: playerID,
+            quizPIN: quizPin,
+            adminAction: true
+        };
+        socket.send(JSON.stringify(msg));
+    });
+    buttonEnd = document.getElementById("end");
+    buttonEnd.addEventListener("click", function (){
+        var msg = {
+            content: "End quiz",
+            type: "END_QUIZ",
             senderID: playerID,
             quizPIN: quizPin,
             adminAction: true
