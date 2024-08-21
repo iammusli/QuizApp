@@ -18,17 +18,19 @@ public class QuizRoom {
     private boolean quizStarted = false;
     private List<Session> clientSessions;
     private Map<String, String> playerAnswers;
+    private Map<String, Integer> playerPoints;
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> questionTimer;
     private Iterator<Question> questionIterator;
     private Question currentQuestion;
-    private int questionTimeLimit = 30;
+    private int questionTimeLimit = 15;
 
     public QuizRoom(String quizPIN, int quizID){
         this.quizPIN = quizPIN;
         this.quiz = new QuizService(new QuizDAO()).getQuizById(quizID);
         this.clientSessions = new ArrayList<Session>();
         this.playerAnswers = new ConcurrentHashMap<>();
+        this.playerPoints = new ConcurrentHashMap<>();
         this.scheduler = Executors.newScheduledThreadPool(1);
         this.questionIterator = quiz.getQuestions().iterator();
         this.currentQuestion = questionIterator.next();
@@ -50,8 +52,15 @@ public class QuizRoom {
             currentQuestion();
             startQuestionTimer();
         } else {
+            sendResults();
             endQuiz();
         }
+    }
+
+    private void sendResults() {
+        playerPoints.forEach((player, points) -> {
+            broadcastMessage(new Message(Integer.toString(points), MessageType.QUIZ_RESULTS.name(), player, quizPIN, true));
+        });
     }
 
     public void currentQuestion(){
@@ -63,6 +72,7 @@ public class QuizRoom {
                 answers.add(gson.toJson(currentQuestion.getAnswers().get(i).getAnswer_text()));
             }
             broadcastMessage(new Message(gson.toJson(answers), MessageType.ANSWERS_BROADCAST.name(), "Server", quizPIN, false));
+            startQuestionTimer();
         }
     }
 
@@ -71,18 +81,29 @@ public class QuizRoom {
             questionTimer.cancel(true);
         }
         questionTimer = scheduler.schedule(() -> {
-            broadcastMessage(new Message("Time's up for this question!", MessageType.CHAT_MESSAGE.name(), "Server", quizPIN, true));
+            broadcastMessage(new Message("Time's up for this question!", MessageType.TIME_UP.name(), "Server", quizPIN, true));
             // Optionally handle automatic answer submission here if needed
         }, questionTimeLimit, TimeUnit.SECONDS);
     }
 
     public void submitAnswer(String playerId, String answer) {
         playerAnswers.put(playerId, answer);
-        if (playerAnswers.size() == clientSessions.size()) {
+        if (playerAnswers.size() == (clientSessions.size()-1)) {
             // All players have answered; move to the next question
             broadcastMessage(new Message("All answers are in!", MessageType.CHAT_MESSAGE.name(), "Server", quizPIN, true));
-            nextQuestion();
         }
+
+        if(playerPoints.containsKey(playerId)){
+            if(checkAnswer(Integer.parseInt(playerAnswers.get(playerId)))){
+                playerPoints.put(playerId, playerPoints.get(playerId) + currentQuestion.getPoints());
+            }
+        } else {
+            playerPoints.put(playerId, 0);
+            if(checkAnswer(Integer.parseInt(playerAnswers.get(playerId)))){
+                playerPoints.put(playerId, playerPoints.get(playerId) + currentQuestion.getPoints());
+            }
+        }
+        broadcastMessage(new Message(Integer.toString(playerPoints.get(playerId)), MessageType.POINTS.name(), playerId, quizPIN, false));
     }
 
     public void skipQuestion() {
@@ -135,6 +156,7 @@ public class QuizRoom {
     }
 
     public boolean checkAnswer(int choice) {
+        if(choice == 4) return false;
         if(currentQuestion.getAnswers().get(choice).isCorrect())
             return true;
         else return false;

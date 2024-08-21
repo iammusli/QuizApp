@@ -53,6 +53,10 @@ public class QuizWebSocket {
                 }
                 quizRoom.broadcastMessage(msg);
                 break;
+            case FORCED_ANSWER_SUBMISSION:
+                quizRoom.submitAnswer(message.getSenderID(), message.getContent());
+                System.out.println("Answer submitted! Sender: " + message.getSenderID() + " Answer: " + message.getContent());
+                break;
             case START_QUIZ:
                 if (message.isAdminAction()) {
                     quizRoom.currentQuestion();

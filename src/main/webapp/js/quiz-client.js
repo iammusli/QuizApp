@@ -5,7 +5,7 @@ let playerID;
 
 let playerCount = 0;
 const players = document.getElementById("players");
-
+const points = document.getElementById("points");
 let questionText = "";
 let question = null;
 let answer1 = null;
@@ -77,6 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     signalResult(correct);
                 }
                 break;
+            case 'POINTS':
+                if(message.senderID === playerID){
+                    points.textContent = message.content;
+                }
+                break;
             case 'CHAT_MESSAGE':
                 if(message.senderID !== playerID)
                     console.log(message.senderID + ": " + message.content);
@@ -92,6 +97,22 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'LEAVE_ROOM':
                 playerCount--;
                 players.textContent = playerCount;
+                break;
+            case 'TIME_UP':
+                var msg = {
+                    content: 4,
+                    type: "FORCED_ANSWER_SUBMISSION",
+                    senderID: playerID,
+                    quizPIN: quizPin,
+                    adminAction: false
+                }
+                socket.send(JSON.stringify(msg));
+                disableOptions();
+                break;
+            case 'QUIZ_RESULTS':
+                if(message.senderID === playerID){
+                    console.log(playerID + " earned " + message.content + " points")
+                }
                 break;
             default:
                 console.log('Unknown message type:', message.type);
@@ -109,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             optionElem.addEventListener('click', () => handleOptionSelect(i));
             optionsElem.appendChild(optionElem);
         }
+        removeStyles();
     }
 
     function handleOptionSelect(index){
@@ -139,6 +161,14 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             quizOptions[selectedAnswer].setAttribute("style", "background-color: red");
         }
+    }
+
+    function removeStyles(){
+        const quizOptions = document.querySelectorAll('.quiz-option');
+        quizOptions.forEach((option)=>{
+            option.removeAttribute("style");
+            option.classList.remove("disabled");
+        });
     }
 });
 

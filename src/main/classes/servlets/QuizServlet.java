@@ -58,9 +58,6 @@ public class QuizServlet extends HttpServlet {
 
                 request.setAttribute("room", acp);
 
-                int id = Integer.parseInt(quizID);
-                Quiz quiz = quizService.getQuizById(id);
-
                 if(request.getSession().getAttribute("user") != null){
                     request.getSession().setAttribute("playerID", ((User)request.getSession().getAttribute("user")).getUsername());
                 }

@@ -21,17 +21,6 @@
             <div class="quiz-question">
                 <p id="question-text"></p>
             </div>
-            <div class="quiz-timer">
-                <div class="circle-container">
-                    <div class="semicircle"></div>
-                    <div class="semicircle"></div>
-                    <div class="semicircle"></div>
-                    <div class="outermost-circle"></div>
-                </div>
-                <div class="timer-container">
-                    <div class="timer">00:00</div>
-                </div>
-            </div>
             <div class="quiz-info-bar">
                 <div class="points">
                     <i class="fas fa-star"></i> <span id="points">0 Points</span>
@@ -42,12 +31,6 @@
             </div>
             <div class="quiz-options" id="quiz-options">
                 <!-- Options will be added dynamically here -->
-            </div>
-            <div class="quiz-footer">
-                <button id="next-question">Next Question</button>
-                <div class="quiz-info">
-                    <p>Question <span id="current-question-number">0</span> of <span id="total-questions">0</span></p>
-                </div>
             </div>
             <div id="results-popup" class="popup-overlay" style="display: none;">
                 <div class="popup-content">

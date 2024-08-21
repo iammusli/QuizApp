@@ -68,9 +68,6 @@ function handleMessage(message) {
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log("JavaScript is loaded and DOM is ready.");
-
-
-
     question = document.getElementById("question-text");
     answer1 = document.getElementById("answer-text-1");
     answer2 = document.getElementById("answer-text-2");
@@ -130,8 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
             adminAction: true
         };
         socket.send(JSON.stringify(msg));
-        buttonStart.disabled = true;
-        buttonStart.classList.add("disabled");
     });
     buttonSkip = document.getElementById("skip");
     buttonSkip.addEventListener("click", function (){
